@@ -1,0 +1,103 @@
+Primero se obtienen los datos del dia para el PBLH.
+
+1. PBLH diario con ./python_cont/get_average_grib.py
+
+Se corta y se une con los datos bajados desde GEE
+
+2. Todas las bandas con ./python_cont/get_res_cut_merge.py
+
+2.5 Se tiene que renombrar las bandas se hace desde un notebook de python 'bands_names_GEE_collections.ipynb'
+
+
+Se hacen las predicciones con código de bash que llama a un codigo de R 
+Ya  se tiene que tener la capa de vialidades y que sea legible para R 
+
+3. Se hacen con todo el año ./multiple_yearpredictions.sh
+
+3.1 El Script de R que hace todo por un intervalo de tiempo es ./year_prediction_day_just_script.R
+
+Se tiene que añadir los nombres de las bandas a las cosas hechas
+
+4. Se tiene que cambia al folder con los códigos de python y llamar ./python_conta/call_renamebands.sh para hacerlo en baches de años
+si no se 
+4.1 el scrip que cambia le nombre de las bandas por directorio es  ./python_conta/rename_bands_predictions.py
+
+ Se hace un folder con todos los archivos para despues hacer las cosas por temporada.
+
+
+5. El scrip que hace esto es ./datos/raster/create_links.sh
+
+
+Ya con las predicciones se hace un tensor spline para obtener uno por mes
+
+6. Se hace desde R con la función get_all_seasons_interval se encuentra en spline_year_predictions.R 
+
+Desde R
+> knitr::purl("./spline_year_predictions.qmd")
+>get_all_seasons_interval(
+    "./datos/raster/all_predictions_symlinks/",
+    "./datos/raster/Season_tensor_9PBLH/seasons_total/",
+    "2004-03-01",
+    "2009-03-01"
+    )
+
+ Se tienen que renombrar la banda en el tensor spline.
+
+7. Se hace con el script ./python_cont/rename_single_string.py
+
+
+
+AQUI es donde tenemos que modificar para tomar en consideración el cambio 
+en las estimaciones usando el modelo 3.  Se usa el spline y se modifica para obtener una predicción 
+cuando no se tiene AOD 
+
+Se hace la prediccion diaria por temporada con la función en R
+
+8. Se hace desde R con la función  get_all_days_spline_interval que se encuentra en spline_year_predictions.qmd
+
+
+
+> get_all_days_spline_interval(
+    start_date  = "2004-03-01",
+    end_date = "2004-04-30", 
+    file_path_prediction =  "./datos/raster/all_predictions_symlinks/",
+    file_path_season_tensor= "./datos/raster/Season_tensor_9PBLH/seasons_total/",
+    data_pm_reanalisis_est = "./datos/datos_predic/", 
+    complete_band =  "temperature_2m",
+    splin_band ="PM25_predict",
+    prefix_predic = "predi_25PM_",
+    path_save_predictions_2 = "./datos/raster/ZMVM_9PBLH_seasons_days/",
+    prefix_save_predic_2= "predict_just_warm_"
+)
+
+Por como se genera las estimaciones en las funcions model 3 es necesario cambiarlas de lugar 
+se hace con move_pred_m3.sh
+
+
+Se tienen que renombrar la banda y pegar
+
+Para renombrar la banda utilizamos el script ya hecho 
+
+9. Se hace con el script ./python_cont/rename_single_string.py
+9.1 for YEAR in {2004..2022}; do  python rename_single_string.py --season_spline_path "../datos
+/raster/ZMVM_9PBLH_seasons_days/$YEAR/" --name_band "PM25_predict_spline"; done
+
+
+Se pegan el spline con la prediccion de los datos
+
+
+10.  python glue_bands_folder_all.py  --day_season_spline_path "../datos/raster/ZMVM_9PBLH_seasons_days/" --day_predictions  "../datos/raster/ZMVM_predictions_9PBLH/" --save_path_glue "../datos/raster/ZMVM_9PBHL_prediction_glue/" --start_year "2006" --end_year "2022"
+Como se cambio la forma del string del archivo se tuvo que hacer una modificación al programa
+entonce se utiliza el glue_bands_folder_all_M3.py
+
+10.2.  python glue_bands_folder_all.py  --day_season_spline_path "../datos/raster/ZMVM_9PBLH_seasons_days/" --day_predictions  "../datos/raster/ZMVM_predictions_9PBLH/" --save_path_glue "../datos/raster/ZMVM_9PBHL_prediction_glue/" --start_year "2006" --end_year "2022"
+10.3  python glue_bands_folder_all_M3.py  --day_season_spline_path "../datos/raster/ZMVM_All/model_3_predict/" --day_predictions  "../datos/raster/ZMVM_All/ZMVM_predictions_9PBLH/" --save_path_glue "../datos/raster/ZMVM_All/model_3_glue/" --start_year "2004" --end_year "2022"
+
+
+Se tiene que unir las bandas en una sola, esto se hace usando el script merge_PM_25_bands
+
+11. python merge_PM_25_bands.py --path_glue_rasters "../datos/raster/ZMVM_9PBHL_prediction_glue/" --save_path_merge "../datos/raster/ZMVM_9PBHL_merge_final/" --upper_band "PM25_predict" --under_band "PM25_predict_spline" --merge_band "PM25_merge" --save_prefix "PM25_merge_" --start_year 2006 --end_year 2022 --verbose TRUE
+
+
+
+Con estos pasos terminamos para hacer todo el proceso de Just. 
