@@ -1,26 +1,20 @@
 import cdsapi
 
-dataset = "derived-era5-single-levels-daily-statistics"
+dataset = "reanalysis-era5-single-levels"
+
 
 
 request = {
     "product_type": "reanalysis",
     "variable": [
-        "10m_u_component_of_wind",
         "2m_dewpoint_temperature",
         "2m_temperature",
-        "total_precipitation",
-        "100m_u_component_of_wind",
-        "100m_v_component_of_wind",
-        "total_column_rain_water",
+        "total_precipitation", 
         "boundary_layer_height"
     ],
     "year": "2022",
     "month": [
-        "01", "02", "03",
-        "04", "05", "06",
-        "07", "08", "09",
-        "10", "11", "12"
+        "01", "02"
     ],
     "day": [
         "01", "02", "03",
@@ -35,13 +29,18 @@ request = {
         "28", "29", "30",
         "31"
     ],
-    "daily_statistic": "daily_mean",
-    "time_zone": "utc-06:00",
-    "frequency": "1_hourly",
-    "area": [20.08, -99.67, 18.9, -98.5]
+    "time": [
+        "00:00", "01:00", "02:00",
+        "03:00", "04:00", "05:00",
+        "06:00", "07:00", "08:00",
+        "09:00", "10:00", "11:00",
+        "12:00", "13:00", "14:00",
+        "15:00", "16:00", "17:00",
+        "18:00", "19:00", "20:00",
+        "21:00", "22:00", "23:00"
+    ],
+    "area": [20.5, -99.67, 18.9, -98.5]
 }
 
 client = cdsapi.Client()
-key = '1f2d7087-7924-4ec6-8204-693ba1eeb2c0'
-
 client.retrieve(dataset, request).download()
