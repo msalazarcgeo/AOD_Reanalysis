@@ -28,7 +28,7 @@ def get_mean_day(
         date_final_str, 
         file_path, 
         save_prefix= 'PBLH_', 
-        save_path = './datos/raster/ECMWF_rasters/'
+        save_path = './data/raster/ECMWF_rasters/'
         
         ):
     """Gets the day mean and save it on a given location """
@@ -99,7 +99,94 @@ def get_mean_day(
 
     return 
 
-# mean_day = []
+def get_mean_day_band(
+        date_start_str,
+        date_final_str, 
+        file_path, 
+        band= 'Boundary layer height',
+        save_prefix= 'PBLH_', 
+        save_path = './data/raster/ECMWF_rasters/'
+        
+        ):
+    """Gets the day mean and save it on a given location """
+
+    dic_names={
+            'Boundary layer height':'PBLH', 
+            '2 metre temperature':'temperature_2m',
+            '2 metre dewpoint temperature':'dewpoint_temperature_2m',
+            'Total precipitation':'total_precipitation'
+            }
+
+    date_valid_start = datetime.strptime(date_start_str, '%Y-%m-%d').replace(tzinfo = pytz.timezone('America/Mexico_City'))
+    date_valid_start = date_valid_start.astimezone(pytz.utc)
+
+    print('starting date:',date_valid_start )
+    date_valid_final = datetime.strptime(date_final_str, '%Y-%m-%d').replace(tzinfo = pytz.timezone('America/Mexico_City'))
+    date_valid_final = date_valid_final.astimezone(pytz.utc)
+    print('final date:',date_valid_final )
+    while (date_valid_start<=date_valid_final):
+        print('band:', band)
+        next_day = date_valid_start + timedelta(days=1)
+        #print(next_day)
+        grbs_2 = pygrib.open(file_path)
+        band_selected = grbs_2.select(name=band)
+        day_list =[grb.data() for grb in band_selected  if pytz.UTC.localize(grb.validDate) >= date_valid_start and pytz.UTC.localize(grb.validDate) < next_day ]
+        
+        day_list_data = [data[0] for data in day_list] 
+        
+        day_mean=  np.mean(day_list_data,  axis=0, keepdims=True)
+
+        str_day =date_valid_start.date().strftime("%Y_%m_%d")
+        file_save_name= save_path+save_prefix+str_day+'.tif'
+        ### se abre la localización en disco y se salva el raster promedio
+        ### Pero es necesario obtener la transformacion del raster
+        #print(day_mean[0].shape)
+        bbox_size_r = (day_mean[0].shape[0], day_mean[0].shape[1])
+
+        min_lat_r = day_list[0][1].min()
+        max_lat_r = day_list[0][1].max()
+        min_lon_r = day_list[0][2].min()
+        max_lon_r = day_list[0][2].max()
+
+
+        lat_size_r  = day_list[0][1][0][0]- day_list[0][1][1][0] 
+        long_size_r = day_list[0][2][0][0]- day_list[0][2][0][1] 
+
+        min_lat_r= min_lat_r - (lat_size_r/2)
+        max_lat_r= max_lat_r + (lat_size_r/2)
+        min_lon_r= min_lon_r + (long_size_r/2)
+        max_lon_r= max_lon_r - (long_size_r/2)
+        bbox_r = [min_lon_r, min_lat_r, max_lon_r, max_lat_r]
+        transform_r= rasterio.transform.from_bounds(
+            *bbox_r, width=bbox_size_r[1], height=bbox_size_r[0]
+        )
+        print('Saving file :',file_save_name )
+        #print(day_mean[0].shape)
+
+        band_name= dic_names[band]
+        with rasterio.open(
+            file_save_name,
+            mode="w",
+            driver="GTiff",
+            height= day_mean[0].shape[0],
+            width=  day_mean[0].shape[1],
+            count=1,
+            dtype= day_mean[0].dtype,
+            crs="+proj=latlong",
+            transform=transform_r
+        ) as new_dataset:
+            new_dataset.write(day_mean[0], 1)
+            new_dataset.set_band_description(1, band_name)
+            new_dataset.update_tags(1, DATETIME=str_day)
+
+            new_dataset.close()
+        grbs_2.close()
+        date_valid_start= next_day
+
+    return 
+
+
+
 
 
 
