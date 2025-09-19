@@ -14,3 +14,4 @@ Detailedruning_files/libs/quarto-html/tabsets/tabsets.js
 R_scripts/#multiple_yearpredictions.sh#
 R_scripts/multiple_yearpredictions.sh
 Python_scripts/__pycache__/*
+Python_scripts/.ipynb_checkpoints/get_years_GEE_data_fix-checkpoint.ipynb
