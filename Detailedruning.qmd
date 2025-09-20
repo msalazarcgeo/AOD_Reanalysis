@@ -4,7 +4,7 @@ format: html
 ---
 
 
-This is a tutorial explaininn the basic usage of the the scripts to obthain the result of the *"Modeling in Mexican Cities using  Aerosol Optical Depth and Meteorological Reanalysis Data"*& article 
+This is a tutorial explaininn the basic usage of the the scripts to obthain the result of the *"Modeling in Mexican Cities using  Aerosol Optical Depth and Meteorological Reanalysis Data"* article 
 
 
 The scrips will be added and the basic usage will be explain here. 
@@ -13,28 +13,47 @@ The scrips will be added and the basic usage will be explain here.
 All the data was downloaded from the sources describe in the article. 
 
 
-First the data is obtain using the  get_average_grib.py
+
+## Data gattering 
+* The data from the *ECMWF* the Planetary boundary layer his downloaded obtain using the  get_average_grib.py
+
+* Data from the GEE is obtained using the notebook './Python_scripts/get_years_GEE_data_fix.ipynb' and chanche acordently
 
 
-1. Daily Panetary Boundary layer with  `./Python_scripts/get_average_grib.py`
 
-It for the one of the metropolitan areas and merge with the data Downloades from GEE
+
+## With all the data 
+
+1. Daily Panetary Boundary layer with a single raster use the `./Python_scripts/get_average_grib.py`
+
+```bash
+python python ./Python_scripts/get_average_grib.py  --grib_file "./data/ECMWF/2022_PBLH.grib" --path_dir_day_average './data/raster/ECMWF_rasters/2022/' --initial_day "2022-01-01" --final_day "2022-12-31"
+```
+
+For the one of the metropolitan areas and merge with the data Downloades from GEE
 
 2. All the bands with  `./Python_scripts/get_res_cut_merge.py`
 
-    * The bands have to be renamed using a nothebook `./Python_scripts/bands_names_GEE_collections.ipynb`
+```bash
+
+ python ./Python_scripts/get_res_cut_merg.py --grib_file ./data/ECMWF/2022_PBLH.grib  --path_dir_day_average ./data/raster/ECMWF_rasters/2022/ --path_dir_multy_band ./data/raster/AOD_REA_GEE/ZMVM/2022/ --path_dir_resample ./data/raster/middle_PBLH/resample/2022/ --path_dir_cut ./data/raster/middle_PBLH/cut/2022/  --path_dir_merge ./data/raster/middle_PBLH/all_bands/2022/ --file_metropolitan_polygon ./data/Zonas_metro/ZMVM.shp
+```
 
 
-The predictions are made a bash coda that runs the R codes, the roads had to be readable form R. 
+::: {.callout-warning }
+The data in the folders has to be complete (all day tor the year) if not an error occurre
+:::
 
-3.  Se hacen con todo el año ./multiple_yearpredictions.sh
+The predictions are made using a bash code that runs the R codes, the roads layer had to be readable form R. 
 
-3.1 El Script de R que hace todo por un intervalo de tiempo es ./year_prediction_day_just_script.R
+3.  All is done using the ` ./Call_scripts/multiple_yearpredictions.sh` file. 
+
+    * El Script de R que hace todo por un intervalo de tiempo es ./year_prediction_day_just_script.R
 
 Se tiene que añadir los nombres de las bandas a las cosas hechas
 
-4. Se tiene que cambia al folder con los códigos de python y llamar ./python_conta/call_renamebands.sh para hacerlo en baches de años
-si no se 
+4. Se tiene que cambia al folder con los códigos de python y llamar ./python_conta/call_renamebands.sh para hacerlo en baches de años si no se 
+
 4.1 el scrip que cambia le nombre de las bandas por directorio es  ./python_conta/rename_bands_predictions.py
 
  Se hace un folder con todos los archivos para despues hacer las cosas por temporada.
@@ -43,17 +62,20 @@ si no se
 5. El scrip que hace esto es ./datos/raster/create_links.sh
 
 
+Now with the predictions the tensor spline is created
+
 Ya con las predicciones se hace un tensor spline para obtener uno por mes
 
-6. Se hace desde R con la función get_all_seasons_interval se encuentra en spline_year_predictions.R 
+6. It's done inside **R** using the function `get_all_seasons_interval` that is in the `spline_year_predictions.R` file. 
 
-Desde R
+
+From **R**
 
 > knitr::purl("./spline_year_predictions.qmd")
 >get_all_seasons_interval(
-    "./datos/raster/all_predictions_symlinks/",
-    "./datos/raster/Season_tensor_9PBLH/seasons_total/",
-    "2004-03-01",
+    "./data/raster/all_predictions_symlinks/",
+    "./data/raster/Season_tensor_9PBLH/seasons_total/",
+    "2022",
     "2009-03-01"
     )
 
@@ -63,8 +85,7 @@ Desde R
 
 
 
-AQUI es donde tenemos que modificar para tomar en consideración el cambio 
-en las estimaciones usando el modelo 3.  Se usa el spline y se modifica para obtener una predicción 
+AQUI es donde tenemos que modificar para tomar en consideración el cambio en las estimaciones usando el modelo 3.  Se usa el spline y se modifica para obtener una predicción 
 cuando no se tiene AOD 
 
 Se hace la prediccion diaria por temporada con la función en R
@@ -86,8 +107,7 @@ Se hace la prediccion diaria por temporada con la función en R
     prefix_save_predic_2= "predict_just_warm_"
 )
 
-Por como se genera las estimaciones en las funcions model 3 es necesario cambiarlas de lugar 
-se hace con move_pred_m3.sh
+Por como se genera las estimaciones en las funcions model 3 es necesario cambiarlas de lugar  se hace con move_pred_m3.sh
 
 
 Se tienen que renombrar la banda y pegar
@@ -103,8 +123,7 @@ Se pegan el spline con la prediccion de los datos
 
 
 10.  python glue_bands_folder_all.py  --day_season_spline_path "../datos/raster/ZMVM_9PBLH_seasons_days/" --day_predictions  "../datos/raster/ZMVM_predictions_9PBLH/" --save_path_glue "../datos/raster/ZMVM_9PBHL_prediction_glue/" --start_year "2006" --end_year "2022"
-Como se cambio la forma del string del archivo se tuvo que hacer una modificación al programa
-entonce se utiliza el glue_bands_folder_all_M3.py
+Como se cambio la forma del string del archivo se tuvo que hacer una modificación al programa entonce se utiliza el glue_bands_folder_all_M3.py
 
 10.2.  python glue_bands_folder_all.py  --day_season_spline_path "../datos/raster/ZMVM_9PBLH_seasons_days/" --day_predictions  "../datos/raster/ZMVM_predictions_9PBLH/" --save_path_glue "../datos/raster/ZMVM_9PBHL_prediction_glue/" --start_year "2006" --end_year "2022"
 10.3  python glue_bands_folder_all_M3.py  --day_season_spline_path "../datos/raster/ZMVM_All/model_3_predict/" --day_predictions  "../datos/raster/ZMVM_All/ZMVM_predictions_9PBLH/" --save_path_glue "../datos/raster/ZMVM_All/model_3_glue/" --start_year "2004" --end_year "2022"
