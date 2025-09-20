@@ -15,3 +15,7 @@ R_scripts/#multiple_yearpredictions.sh#
 R_scripts/multiple_yearpredictions.sh
 Python_scripts/__pycache__/*
 Python_scripts/.ipynb_checkpoints/get_years_GEE_data_fix-checkpoint.ipynb
+data/raster/middle_PBLH/*
+data/raster/ECMWF_rasters/2022/*
+data/raster/AOD_REA_GEE/ZMVM/*
+Python_scripts/bands_names_GEE_collections_ZMG_redo.ipynb
