@@ -1,20 +1,14 @@
 import cdsapi
 
 dataset = "reanalysis-era5-single-levels"
-
-
-
 request = {
-    "product_type": "reanalysis",
-    "variable": [
-        "2m_dewpoint_temperature",
-        "2m_temperature",
-        "total_precipitation", 
-        "boundary_layer_height"
-    ],
-    "year": "2022",
+    "product_type": ["reanalysis"],
+    "year": ["2022"],
     "month": [
-        "01", "02"
+        "01", "02", "03",
+        "04", "05", "06",
+        "07", "08", "09",
+        "10", "11", "12"
     ],
     "day": [
         "01", "02", "03",
@@ -39,8 +33,13 @@ request = {
         "18:00", "19:00", "20:00",
         "21:00", "22:00", "23:00"
     ],
+    "data_format": "grib",
+    "download_format": "unarchived",
+    "variable": ["boundary_layer_height"],
     "area": [20.5, -99.67, 18.9, -98.5]
 }
 
 client = cdsapi.Client()
-client.retrieve(dataset, request).download()
+
+
+client.retrieve(dataset, request, '2022_PBLH.grib')

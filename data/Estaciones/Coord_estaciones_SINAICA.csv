@@ -1,0 +1,92 @@
+"FUENTE","NOM_EST","CVE_EST","CVE_ENT","NOM_ENT","CVE_MUN","NOM_MUN","LAT","LONG"
+"sinaica","ajusco","AJU_ZMVM",9,"Ciudad de México",276," parres",19.15428611,-99.16277778
+"sinaica","milpa alta","MPA_ZMVM",9,"Ciudad de México",273," san francisco tecoxpa",19.19916667,-99.01083333
+"sinaica","pedregal","PED_ZMVM",9,"Ciudad de México",274,"álvaro obregón",19.32527778,-99.20416667
+"sinaica","plateros","PLA_ZMVM",9,"Ciudad de México",274,"álvaro obregón",19.36702778,-99.20010472
+"sinaica","camarones","CAM_ZMVM",9,"Ciudad de México",266,"azcapotzalco",19.46861111,-99.17
+"sinaica","azcapotzalco","AZC_ZMVM",9,"Ciudad de México",2,"azcapotzalco",19.48938889,-99.19897222
+"sinaica","cuitláhuac ","CUI_ZMVM",9,"Ciudad de México",2,"azcapotzalco",19.47174417,-99.16584028
+"sinaica","benito juárez","BJU_ZMVM",9,"Ciudad de México",278,"benito juárez",19.37166667,-99.15916667
+"sinaica","atizapán","ATI_ZMVM",9,"Ciudad de México",13,"Atizapán de Zaragoza",19.57722222,-99.25416667
+"sinaica","villa de las flores","VIF_ZMVM",9,"Ciudad de México",20,"coacalco de berriozábal",19.6575,-99.09666667
+"sinaica","centro de ciencias de la atmósfera","CCA_ZMVM",9,"Ciudad de México",267,"coyoacán",19.32638889,-99.17611111
+"sinaica","coyoacán","COY_ZMVM",9,"Ciudad de México",267,"coyoacán",19.35027778,-99.15722222
+"sinaica","uam xochimilco","UAX_ZMVM",9,"Ciudad de México",267,"coyoacán",19.30444444,-99.10388889
+"sinaica","santa ursula","SUR_ZMVM",9,"Ciudad de México",3,"coyoacán",19.31444444,-99.15005556
+"sinaica","taxqueña ","TAX_ZMVM",9,"Ciudad de México",3,"coyoacán",19.33745667,-99.12298667
+"sinaica","santa fe","SFE_ZMVM",9,"Ciudad de México",268,"cuajimalpa de morelos",19.3575,-99.26305556
+"sinaica","cuajimalpa","CUA_ZMVM",9,"Ciudad de México",268,"cuajimalpa de morelos",19.36555556,-99.29194444
+"sinaica","hospital general de méxico","HGM_ZMVM",9,"Ciudad de México",279,"cuauhtémoc",19.41166667,-99.15222222
+"sinaica","lagunilla","LAG_ZMVM",9,"Ciudad de México",15,"cuauhtémoc",19.44416667,-99.135275
+"sinaica","museo de la ciudad de méxico ","MON_ZMVM",9,"Ciudad de México",15,"cuauhtémoc",19.42916667,-99.13222222
+"sinaica","metro insurgentes","MIN_ZMVM",9,"Ciudad de México",15,"cuauhtémoc",19.4235625,-99.16289361
+"sinaica","san agustín","SAG_ZMVM",9,"Ciudad de México",33,"ecatepec de morelos",19.53305556,-99.03055556
+"sinaica","gustavo a. madero","GAM_ZMVM",9,"Ciudad de México",269,"gustavo a. madero",19.48277778,-99.09472222
+"sinaica","san juan de aragón","SJA_ZMVM",9,"Ciudad de México",269,"gustavo a. madero",19.45277778,-99.08611111
+"sinaica","aragón","ARA_ZMVM",9,"Ciudad de México",5,"gustavo a. madero",19.47138,-99.07454611
+"sinaica","instituto mexicano del petróleo ","IMP_ZMVM",9,"Ciudad de México",5,"gustavo a. madero",19.49027778,-99.14722222
+"sinaica","la villa","LVI_ZMVM",9,"Ciudad de México",5,"gustavo a. madero",19.46970833,-99.11792222
+"sinaica","vallejo","VAL_ZMVM",9,"Ciudad de México",5,"gustavo a. madero",19.52413944,-99.16599861
+"sinaica","iztacalco","IZT_ZMVM",9,"Ciudad de México",270,"iztacalco",19.38444444,-99.11777778
+"sinaica","santiago acahualtepec","SAC_ZMVM",9,"Ciudad de México",271,"iztapalapa",19.34561,-99.00938083
+"sinaica","uam iztapalapa","UIZ_ZMVM",9,"Ciudad de México",271,"iztapalapa",19.36083333,-99.07388889
+"sinaica","cerro de la estrella","CES_ZMVM",9,"Ciudad de México",7,"iztapalapa",19.33655556,-99.07511111
+"sinaica","lomas","LOM_ZMVM",9,"Ciudad de México",280,"miguel hidalgo",19.403,-99.24205556
+"sinaica","miguel hidalgo","MGH_ZMVM",9,"Ciudad de México",280,"miguel hidalgo",19.404,-99.20272222
+"sinaica","secretaría de hacienda","SHA_ZMVM",9,"Ciudad de México",280,"miguel hidalgo",19.44619444,-99.20786111
+"sinaica","tacuba","TAC_ZMVM",9,"Ciudad de México",16,"miguel hidalgo",19.45484639,-99.20281472
+"sinaica","netzahualcóyotl ","NET_ZMVM",9,"Ciudad de México",58,"nezahualcóyotl",19.42230861,-99.02611833
+"sinaica","netzahualcóyotl sur ","NTS_ZMVM",9,"Ciudad de México",58,"nezahualcóyotl",19.38888889,-99.01944444
+"sinaica","ajusco medio","AJM_ZMVM",9,"Ciudad de México",276,"tlalpan",19.27222222,-99.20777778
+"sinaica","tlalpan","TPN_ZMVM",9,"Ciudad de México",12,"tlalpan",19.25685833,-99.18386222
+"sinaica","merced","MER_ZMVM",9,"Ciudad de México",281,"venustiano carranza",19.42472222,-99.11972222
+"sinaica","hangares","HAN_ZMVM",9,"Ciudad de México",17,"venustiano carranza",19.42305556,-99.08472222
+"sinaica","tlahuac","TAH_ZMVM",9,"Ciudad de México",275,"xochimilco",19.24666667,-99.01083333
+"sinaica","centro ","CEN_ZMG",14,"Jalisco",570," guadalajara",20.67376472,-103.3333361
+"sinaica","miravalle","MIR_ZMG",14,"Jalisco",570," guadalajara",20.61444444,-103.3433333
+"sinaica","oblatos","OBL_ZMG",14,"Jalisco",570," guadalajara",20.70053861,-103.2966167
+"sinaica","vallarta","VAL_ZMG",14,"Jalisco",651," guadalajara",20.68019306,-103.3985514
+"sinaica","santa fe","SFE_ZMG",14,"Jalisco",628," la unión del cuatro",20.52914944,-103.3771794
+"sinaica","las pintas","PIN_ZMG",14,"Jalisco",601," las pintas",20.57682389,-103.3265286
+"sinaica","loma dorada","LDO_ZMG",14,"Jalisco",632," tonalá",20.62929472,-103.2639742
+"sinaica","las águilas","AGU_ZMG",14,"Jalisco",651," zapopan",20.63126806,-103.4164308
+"sinaica","tlaquepaque","TLA_ZMG",14,"Jalisco",98,"san pedro tlaquepaque",20.64096667,-103.3125919
+"sinaica","Atemajac","ATM_ZMG",14,"Jalisco",651,"zapopan",20.71967389,-103.3554347
+"sinaica","acolman","ACO_ZMVM",15,"México",658," acolman",19.63555556,-98.91222222
+"sinaica","tultitlán","TLI_ZMVM",15,"México",765," buenavista",19.60277778,-99.17722222
+"sinaica","chalco","CHO_ZMVM",15,"México",681," chalco de díaz covarrubias",19.26722222,-98.88611111
+"sinaica","los laureles","LLA_ZMVM",15,"México",689," ecatepec de morelos",19.57888889,-99.03972222
+"sinaica","xalostoc","XAL_ZMVM",15,"México",689," ecatepec de morelos",19.52611111,-99.0825
+"sinaica","instituto nacional de investigaciones nucleares","INN_ZMVM",15,"México",718," la marquesa",19.29222222,-99.38055556
+"sinaica","montecillo","MON_ZMVM",15,"México",755," montecillo",19.46041667,-98.90286111
+"sinaica","fes acatlán","FAC_ZMVM",15,"México",713," naucalpan de juárez",19.4825,-99.24361111
+"sinaica","fes aragón","FAR_ZMVM",15,"México",714," nezahualcóyotl",19.47369194,-99.04617583
+"sinaica","nezahualcóyotl","NEZ_ZMVM",15,"México",714," nezahualcóyotl",19.39388889,-99.02833333
+"sinaica","calimaya","CA_ZMVT",15,"México",674," san andrés ocotlán",19.19269444,-99.58616667
+"sinaica","aeropuerto","AP_ZMVT",15,"México",762," san miguel totoltepec",19.33455833,-99.57397222
+"sinaica","santa maría atarasquillo","AT_ZMVT",15,"México",707," santa maría atarasquillo",19.32944444,-99.46888889
+"sinaica","cuautitlán","CUT_ZMVM",15,"México",751," tepotzotlán",19.72222222,-99.19861111
+"sinaica","la presa","LPR_ZMVM",15,"México",760," tlalnepantla de baz",19.535,-99.11777778
+"sinaica","tlalnepantla","TLA_ZMVM",15,"México",760," tlalnepantla de baz",19.52916667,-99.20472222
+"sinaica","toluca centro","CE_ZMVT",15,"México",762," toluca de lerdo",19.27808333,-99.65641667
+"sinaica","almoloya de juárez","AJ_ZMVT",15,"México",661," villa de almoloya de juárez",19.37043889,-99.75275
+"sinaica","xonacatlán","XO_ZMVT",15,"México",771," xonacatlán",19.39942222,-99.53005556
+"sinaica","metepec","MT_ZMVT",15,"México",54,"metepec",19.27019444,-99.59519444
+"sinaica","san mateo atenco","SM_ZMVT",15,"México",76,"san mateo atenco",19.28041667,-99.54166667
+"sinaica","ceboruco","CB_ZMVT",15,"México",106,"toluca",19.26030556,-99.64572222
+"sinaica","oxtotitlán","OX_ZMVT",15,"México",106,"toluca",19.28344444,-99.68348889
+"sinaica","san cristobal","SC_ZMVT",15,"México",106,"toluca",19.32722222,-99.63428889
+"sinaica","cadereyta","SE3_AMM",19,"Nuevo León",956," cadereyta jiménez",25.60055556,-99.99416667
+"sinaica","apodaca","NE2_AMM",19,"Nuevo León",953," cd apodaca",25.77722222,-100.1883333
+"sinaica","escobedo","N_AMM",19,"Nuevo León",968," cd gral escobedo",25.80055556,-100.3444444
+"sinaica","garcía","NO2_AMM",19,"Nuevo León",965," garcía",25.78333333,-100.5858333
+"sinaica","la pastora","SE_AMM",19,"Nuevo León",973," guadalupe",25.66805556,-100.2494444
+"sinaica","juárez","SE2_AMM",19,"Nuevo León",978," juárez",25.64611111,-100.0955556
+"sinaica","obispado","CE_AMM",19,"Nuevo León",986," monterrey",25.67583333,-100.3383333
+"sinaica","san bernabé","NO_AMM",19,"Nuevo León",986," monterrey",25.75694444,-100.3658333
+"sinaica","universidad","N2_AMM",19,"Nuevo León",993," san nicolás de los garza",25.73,-100.3097222
+"sinaica","san nicolás","NE_AMM",19,"Nuevo León",993," san nicolás de los garza",25.74527778,-100.255
+"sinaica","san pedro","SO2_AMM",19,"Nuevo León",966," san pedro garza garcía",25.66527778,-100.4127778
+"sinaica","santa catarina","SO_AMM",19,"Nuevo León",995," santa catarina",25.67555556,-100.4647222
+"sinaica","pueblo serena","SUR_AMM",19,"Nuevo León",986,"monterrey",25.57527778,-100.2491667
+"sinaica","pesquería","NE3_AMM",19,"Nuevo León",988,"pesquería",25.79055556,-100.0785278
