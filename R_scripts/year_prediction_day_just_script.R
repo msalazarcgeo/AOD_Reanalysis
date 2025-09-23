@@ -85,7 +85,7 @@ main <- function() {
         p,
         "--path_estations_location",
         help = "path to xls with the estations",
-        default = "./datos/Estaciones/Coord_estaciones_SINAICA.xlsx"
+        default = "./data/Estaciones/Coord_estaciones_SINAICA.xlsx"
     )
     p <- add_argument(
         p,
@@ -105,7 +105,7 @@ main <- function() {
     p <- add_argument(
         p,
         "--path_data_raster",
-        help = "path to the directory where the rasters are store 8 bands"
+        help = "path to the directory where the rasters with all bands are stored"
     )
     p <- add_argument(
         p,
@@ -142,6 +142,7 @@ main <- function() {
         "--file_name_datos_pm",
         help = "path to the save the model"
     )
+    #print(p)
     argv <- parse_args(p)
     cosa_rda <- argv$path_estations_cont[[1]]
     all_function(

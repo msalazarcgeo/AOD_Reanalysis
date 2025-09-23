@@ -17,7 +17,11 @@ All the data was downloaded from the sources describe in the article.
 ## Data gattering 
 * The data from the *ECMWF* the Planetary boundary layer his downloaded obtain using the  get_average_grib.py
 
-* Data from the GEE is obtained using the notebook './Python_scripts/get_years_GEE_data_fix.ipynb' and chanche acordently
+* Data from the GEE is obtained using the notebook './Python_scripts/get_years_GEE_data_fix.ipynb' and chanche acordently.
+
+* Data from the stations is obtaine using the API from SINAICA. 
+
+
 
 
 
@@ -41,12 +45,33 @@ For the one of the metropolitan areas and merge with the data Downloades from GE
 
 
 ::: {.callout-warning }
-The data in the folders has to be complete (all day tor the year) if not an error occurre
+The data in the folders has to be complete (all day tor the year for bouth, the PBLH rasters and the AOD_reanalisys data) if not an error occur. 
 :::
 
 The predictions are made using a bash code that runs the R codes, the roads layer had to be readable form R. 
 
-3.  All is done using the ` ./Call_scripts/multiple_yearpredictions.sh` file. 
+3.  All is done using the ` ./R_scripts/multiple_yearpredictions.sh` file. 
+
+    * The R scrtipt does all for a time interval is `./year_prediction_day_just_script.R` is a wrapper of the `year_prediction_day_just_script.sh` that calls the functions created in R to call all the necesary data 
+
+        * --path_estations_cont is the path where the data from the stations are store, this data is the one with the daily stations, 
+        * --path_estations_location 
+        * --path_estations_location
+        * --path_save_coef
+        * --path_data_raster
+        * --path_vialidades
+        * -s Start date
+        * -e End date 
+        * --year The year that is been done  
+        * --file_name_datos_pm path to a file to store the pm data. 
+
+
+
+
+    ```bash
+    # Rscript year_prediction_day_just_script.R --path_estations_cont "./data/datos_limpios_03_2023/BDA_dia_sr.Rda" --path_estations_location "./datos/Estaciones/Coord_estaciones_SINAICA.xlsx" c "./datos/raster/ZMVM_predictions_9PBLH/2017_bis/" --prefix_save "predi_25PM_" --path_save_coef "./datos/coeff/" --path_data_raster "./datos/raster/middle_PBLH/all_bands/2017/" --path_vialidades "./datos/raster/Vialidades_Miguel/ZMVM/all_vialidades_2.tif" -s "2017-01-01" -e "2017-12-31" --year 2017 --file_name_datos_pm "./datos/datos_pm_2017.rda"
+    ```
+
 
     * El Script de R que hace todo por un intervalo de tiempo es ./year_prediction_day_just_script.R
 
