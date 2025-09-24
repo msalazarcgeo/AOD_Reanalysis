@@ -66,11 +66,11 @@ The predictions are made using a bash code that runs the R codes, the roads laye
         * --file_name_datos_pm path to a file to store the pm data. 
 
 
+The file that woork for an antire year is `year_prediction_day_just_script.R` and the call is as follow
 
-
-    ```bash
-    # Rscript year_prediction_day_just_script.R --path_estations_cont "./data/datos_limpios_03_2023/BDA_dia_sr.Rda" --path_estations_location "./datos/Estaciones/Coord_estaciones_SINAICA.xlsx" c "./datos/raster/ZMVM_predictions_9PBLH/2017_bis/" --prefix_save "predi_25PM_" --path_save_coef "./datos/coeff/" --path_data_raster "./datos/raster/middle_PBLH/all_bands/2017/" --path_vialidades "./datos/raster/Vialidades_Miguel/ZMVM/all_vialidades_2.tif" -s "2017-01-01" -e "2017-12-31" --year 2017 --file_name_datos_pm "./datos/datos_pm_2017.rda"
-    ```
+```bash
+    Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/AOD_REA_GEE/ZMVM/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --file_name_datos_pm "../data/data_station_obtained/pm_data_2022.rda"
+```
 
 
     * El Script de R que hace todo por un intervalo de tiempo es ./year_prediction_day_just_script.R
