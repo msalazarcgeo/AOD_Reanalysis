@@ -1,0 +1,109 @@
+---
+title: "Merge data like original"
+format: html
+---
+
+##  Objective 
+
+This notebook is build only to show how to generate a dataframe that was use to obthain the the results of the article. 
+
+
+Since is has to be store in a `RDA` I will do it on *R*. Since all the data has been dawnloaded in a specific path 
+```{r}
+pacman::p_load(tidyverse)
+```
+
+Load all the csv files 
+
+
+
+```{r}
+path_crude_files <- '../data/Crude_stations/'
+temp_files <- list.files(path_crude_files, 
+    full.names = TRUE,
+    pattern="\\.csv$")
+#temp_files = paste(path_crude_files,temp_files , sep="")
+#myfiles = lapply(temp_files, read.delim)
+#combined_data <- map_dfr(temp_files, read_csv)
+
+```
+
+
+
+```{r}
+df_li = list()
+counter= 1
+for(file_csv in 1:length(temp_files)){
+    print(temp_files[[file_csv]])
+    df_temp <- read_csv(temp_files[[file_csv]])
+    if(nrow(df_temp)> 0 ){
+        df_li[[counter]] = df_temp
+        counter = counter +1
+    }
+}
+
+
+```
+
+
+```{r}
+df_data <- bind_rows(df_li)
+```
+Ramoev duplicates 
+
+```{r}
+ df_data <- df_data %>% distinct(station_name, date, hour, parametro, .keep_all = TRUE)
+```
+
+```{r}
+year_selected <- unique(year(df_data$date))
+
+horas_num_tmp  <-  df_data%>%
+    filter( parametro == 'TMP') %>%
+    group_by(station_name,station_id, station_code,date)%>%
+    summarize(
+        horas_tmp= n(),
+        TMP_mean = mean(value)
+        )
+    
+
+horas_num_hr  <-  df_data%>%
+    filter( parametro == 'HR') %>%
+    group_by(station_name,station_id, station_code,date)%>%
+    summarize(
+        horas_hr = n(), 
+        HR_mean = mean(value)
+    )
+
+horas_num_pm25  <-  df_data%>%
+    filter( parametro == 'PM2.5') %>%
+    group_by(station_name,station_id, station_code,date)%>%
+    summarize(
+        horas_pm25 = n(),
+        PM2.5_mean = mean(value)
+        )
+
+horas_num_pm10  <-  df_data%>%
+    filter( parametro == 'PM10') %>%
+    group_by(station_name,station_id, station_code,date)%>%
+    summarize(
+        horas_pm10 = n(),
+        PM10_mean = mean(value)
+        )
+
+#df_con_valid = left_join(listhoras_num_hr, horas_num_hr , by = c('fecha'='fecha'))
+
+
+```
+
+
+```{r}
+library(purrr)
+
+list_df <- list(horas_num_tmp,horas_num_hr,horas_num_pm25, horas_num_pm10)
+result <- reduce(list_df, inner_join, by = c("station_name",'station_id', "date"))
+
+```
+
+
+With all the data available create the dataframe in columns for meean for the day 
