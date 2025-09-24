@@ -31,7 +31,7 @@ get_contaminant_df <- function(
     BDA_dia <- BDA_dia_sr  %>% 
     as_tibble() %>% 
     filter(
-        grepl(zona_metro , BDA_dia_sr$CVE_EST ) & (year(TIMESTAMP_AOD) == year)
+        grepl(zona_metro , BDA_dia_sr$CVE_EST ) & (year(FECHA) == year)
     )%>%
     dplyr::select(
         CVE_EST,
