@@ -123,6 +123,7 @@ all_var_dataframe <- function(
     est_coord_path,
     path_raster_year,
     path_raster_vialidades,
+    prefix_file=FALSE,
     ...
 ){
 
@@ -174,6 +175,7 @@ all_var_dataframe <- function(
                                             "Longitud","Optical_Depth_047",
                                             "temperature_2m" ,"PBLH","relative_humidity",
                                             "total_precipitation_hourly","total_precipitation")]
+        print(df_day_stations)
         day_df_list[[counter]]= df_day_stations
         counter = counter+1
     }

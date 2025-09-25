@@ -55,7 +55,7 @@ get_day_values_raster <- function(
 
     }
     else{
-
+        print("File doesn't exist")
         est_df$Optical_Depth_047 <- NA
         est_df$temperature_2m <- NA
         est_df$PBLH <- NA

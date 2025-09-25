@@ -16,8 +16,8 @@ all_function <- function(
     path_vialidades,
     path_save_coeff,
     path_save_rasters,
-    prefix_save,
     file_name_datos_pm,
+    #prefix_save=FALSE,
     ...
 ) {
     if (!require("pacman")) install.packages("pacman");
@@ -36,6 +36,7 @@ all_function <- function(
         est_loc_path,
         path_data_rast_year,
         path_vialidades,
+        #prefix_file
         ...
     )
     df_all_data_scale <- zscore_values_pm(df_all_data)    %>% drop_na()
