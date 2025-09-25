@@ -27,7 +27,7 @@ pacman::p_load(tidyverse, sf, lubridate, ggplot2, ggpmisc, lme4, gridExtra,
 #' @param dia  date 
 #' @param path_rasters string 
 #' @param prefix  string 
-#' @param est_df data.frame  The dataframe with th day values
+#' @param est_df data.frame  The dataframe with the day values
 get_day_values_raster <- function(
         dia,
         path_rasters,

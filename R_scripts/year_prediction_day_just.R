@@ -68,11 +68,10 @@ get_contaminant_df <- function(
 #' @return dataframe with the locations
 station_loc <- function(
     path_est_loc = "./datos/Estaciones/Coord_estaciones_SINAICA.xlsx",
-    df_contaminants, 
+    df_contaminants,
     verbose=FALSE
-
-    )
-    {
+)
+{
     if(verbose){
         print("loading data from xlsx file")
     }
@@ -123,7 +122,6 @@ all_var_dataframe <- function(
     est_coord_path,
     path_raster_year,
     path_raster_vialidades,
-    prefix_file=FALSE,
     ...
 ){
 
@@ -141,8 +139,9 @@ all_var_dataframe <- function(
     day_df_list = list()
     counter = 1
     if (exists("prefix_file")==FALSE){
+        
         if(zona_metro == "ZMVM"){
-            prefix_file <- "aod_cli_PBLH_ZMVM_"
+            prefix_file <- "aod_cli_PBLH_"
         }
         else if(zona_metro == "AMM"){
             prefix_file <- "aod_cli_PBLH_AMM_"
@@ -332,7 +331,7 @@ get_raster_predictions <- function(
     counter = 1
     if (exists("prefix_file")==FALSE){
         if(zona_metro == "ZMVM"){
-            prefix_file <- "aod_cli_PBLH_ZMVM_"
+            prefix_file <- "aod_cli_PBLH_"
         }
         else if(zona_metro == "AMM"){
             prefix_file <- "aod_cli_PBLH_AMM_"

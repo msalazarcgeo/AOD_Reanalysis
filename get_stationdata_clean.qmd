@@ -10,11 +10,11 @@ This notebook is build only to show how to generate a dataframe that was use to 
 
 Since is has to be store in a `RDA` I will do it on *R*. Since all the data has been dawnloaded in a specific path 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse, purrr, sf)
+
 ```
 
-Load all the csv files 
-
+Load all the csv files downloaded from the SINAICA API
 
 
 ```{r}
@@ -28,7 +28,7 @@ temp_files <- list.files(path_crude_files,
 
 ```
 
-
+Open all the files and to merge into a single dataframe
 
 ```{r}
 df_li = list()
@@ -41,22 +41,19 @@ for(file_csv in 1:length(temp_files)){
         counter = counter +1
     }
 }
-
-
 ```
-
 
 ```{r}
 df_data <- bind_rows(df_li)
 ```
-Ramoev duplicates 
+Remove duplicates since some data is duplicate was reported more than once
 
 ```{r}
  df_data <- df_data %>% distinct(station_name, date, hour, parametro, .keep_all = TRUE)
 ```
-
+Originaly this is done year by year here is an example that can work for the single year 
 ```{r}
-year_selected <- unique(year(df_data$date))
+#year_selected <- unique(year(df_data$date))
 
 horas_num_tmp  <-  df_data%>%
     filter( parametro == 'TMP') %>%
@@ -98,12 +95,43 @@ horas_num_pm10  <-  df_data%>%
 
 
 ```{r}
-library(purrr)
 
 list_df <- list(horas_num_tmp,horas_num_hr,horas_num_pm25, horas_num_pm10)
-result <- reduce(list_df, inner_join, by = c("station_name",'station_id', "date"))
-
+result <- reduce(list_df, inner_join,
+    by = c("station_name",'station_id','station_code', "date")
+)
+result$station_code <- paste0(result$station_code , '_ZMVM')
 ```
 
 
-With all the data available create the dataframe in columns for meean for the day 
+With all the data available create the dataframe in columns for meean for the day if a new value is needed here is where the cahnges shoul be made. 
+
+The columns needed in the file are **CVE_EST, FECHA, PM2.5_S50,         PM2.5_S60, PM2.5_S75**
+
+
+
+```{r}
+mutate(
+    b = ifelse(PM2.5_mean*.5 >=12, NA, PM2.5_mean)
+  )
+```
+```{r}
+
+BDA_dia_sr <-result %>% mutate(
+    CVE_EST = station_code,
+    FECHA = date,
+    PM2.5_S50  = ifelse(PM2.5_mean*.5 >=12, NA, PM2.5_mean),
+    PM2.5_S60  = ifelse(PM2.5_mean*.6 >=14.2, NA, PM2.5_mean),
+    PM2.5_S75  = ifelse(PM2.5_mean*.75 >=18, NA, PM2.5_mean)
+)#%>%  as_tibble()%>%
+ #dplyr::select(CVE_EST, FECHA, PM2.5_S50, PM2.5_S60, PM2.5_S75)
+save(BDA_dia_sr, file = "../data/R_data/BDA_exemp.Rda")
+head(BDA_dia_sr)
+```
+
+
+
+```{r}
+#save to rda file
+save(result, file = "../data/R_data/BDA_exemp.Rda")
+```
