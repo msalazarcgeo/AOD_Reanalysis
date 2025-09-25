@@ -22,7 +22,10 @@ all_function <- function(
 ) {
     if (!require("pacman")) install.packages("pacman");
     source("./year_prediction_day_just.R")
+    print("Data to get")
+    print("R data path:")
     print(rda_path)
+    print("Estation data path:")
     print(est_loc_path)
     df_all_data  <- all_var_dataframe(
         start_date,
@@ -35,7 +38,11 @@ all_function <- function(
         path_vialidades,
         ...
     )
-    df_all_data_scale <- zscore_values_pm(df_all_data)
+    df_all_data_scale <- zscore_values_pm(df_all_data)    %>% drop_na()
+    if(TRUE){
+        print(head(df_all_data_scale, n= 15))
+    }
+    
     model_just <- lmer(
         "PM25_z~ Optical_Depth_047_z + temperature_2m_z  + relative_humidity_z +  total_precipitation_sqrt_z+PBLH_z+ vialidades_z+(1 + Optical_Depth_047_z | dia )",
         data = df_all_data_scale
@@ -157,7 +164,8 @@ main <- function() {
         path_save_coeff = argv$path_save_coef,
         path_save_rasters = argv$path_save_predictions,
         prefix_save = argv$prefix_save,
-        file_name_datos_pm = argv$file_name_datos_pm
+        file_name_datos_pm = argv$file_name_datos_pm,
+        verbose=TRUE
     )
 }
 main()

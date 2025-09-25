@@ -1,6 +1,6 @@
 
 if (!require("pacman")) install.packages("pacman");
-pacman::p_load(knitr)
+pacman::p_load(knitr, sf)
 
 
 
@@ -22,12 +22,18 @@ source("./Just_todo_process.R")
 get_contaminant_df <- function(
     pm_data_stations_path,
     zona_metro,
-    year
+    year, 
+    verbose = FALSE
 ){
-    print("Loading data:")
+    if(verbose){
+    print("Loading estation pm data from:")
     print(pm_data_stations_path)
+    print("Filter for:")
+    print(zona_metro)
+    print('on')
+    print(year)
+    }
     load(pm_data_stations_path)
-    print("data loaded")
     BDA_dia <- BDA_dia_sr  %>% 
     as_tibble() %>% 
     filter(
@@ -43,6 +49,9 @@ get_contaminant_df <- function(
         CVE_EST= as.character(CVE_EST),
         dia = date(FECHA)
     )
+
+    print("data loaded")
+    print(head(BDA_dia))
     return(BDA_dia)
 }
 
@@ -59,20 +68,29 @@ get_contaminant_df <- function(
 #' @return dataframe with the locations
 station_loc <- function(
     path_est_loc = "./datos/Estaciones/Coord_estaciones_SINAICA.xlsx",
-    df_contaminants
+    df_contaminants, 
+    verbose=FALSE
+
     )
     {
+    if(verbose){
+        print("loading data from xlsx file")
+    }
     estaciones_ubi <- read_excel(path_est_loc)%>%
     mutate(   
-        Latitud = as.numeric(LAT ),
+        Latitud = as.numeric(LAT),
         Longitud = as.numeric(LONG)
     )
+    print(head(df_contaminants))
     estaciones_ubi <-estaciones_ubi[estaciones_ubi$CVE_EST %in%  unique(df_contaminants$CVE_EST ), ]
     est_coords <- estaciones_ubi[, c("Longitud", "Latitud")]%>%
     rename(latitude = Latitud, longitude = Longitud)
-
+    print(head(est_coords))
     est_coords <- SpatialPoints(est_coords)
     raster::crs(est_coords) <- "+proj=longlat +datum=WGS84"
+    if(verbose){
+        print("data Load from xlsx file")
+    }
     return(list(estaciones_ubi, est_coords))
 }
 
@@ -108,11 +126,16 @@ all_var_dataframe <- function(
     ...
 ){
 
+    print("Get R contaminat data")
     bd_dia <- get_contaminant_df(pm_data_stations_path,zona_metro, year)
+    
+    print(head(bd_dia))
+    res_station_loc <- station_loc(est_coord_path, bd_dia, verbose=TRUE)
+    print("Load Estation_data")
     print(est_coord_path)
-    res_station_loc <- station_loc(est_coord_path, bd_dia)
     estaciones_ubi_df <- res_station_loc[[1]]  
     est_coords_sp <- res_station_loc[[2]]  
+    print("Estation_data loaded")
     fechas_considerar <- seq( as.Date(start_date), as.Date(end_date), by="+1 day")
     day_df_list = list()
     counter = 1
