@@ -73,7 +73,7 @@ The predictions are made using a bash code that runs the R codes, the roads laye
 The file that woork for an antire year is `year_prediction_day_just_script.R` and the call is as follow
 
 ```bash
-   Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/AOD_REA_GEE/ZMVM/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --zona_metro "ZMVM" --file_name_datos_pm "../data/data_station_obtained/pm_data_2022.rda"
+   Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/middle_PBLH/all_bands/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --zona_metro "ZMVM" --file_name_datos_pm "../data/data_station_obtained/pm_data_2022.rda"
 ```
 
 
