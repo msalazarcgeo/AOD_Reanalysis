@@ -70,30 +70,27 @@ The predictions are made using a bash code that runs the R codes, the roads laye
         * --file_name_datos_pm path to a file to store the pm data. 
 
 
-The file that woork for an antire year is `year_prediction_day_just_script.R` and the call is as follow
+The file that woork for an entire year is `year_prediction_day_just_script.R` and the call is as follow:
 
 ```bash
-   Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/middle_PBLH/all_bands/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --zona_metro "ZMVM" --file_name_datos_pm "../data/data_station_obtained/pm_data_2022.rda"
+   Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/middle_PBLH/all_bands/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --zona_metro "ZMVM" --file_name_datos_pm "../data/data_station_obtained/pm_data_2022.csv"
 ```
 
+The script take a time interval and obtain the yearly model and available dayly estimations are made. 
 
-    * El Script de R que hace todo por un intervalo de tiempo es ./year_prediction_day_just_script.R
+After all predictions are made the name ob the bands has to be added, this step could be avoided if thi fix to set the name directly in R. 
 
-Se tiene que añadir los nombres de las bandas a las cosas hechas
+4. To change the name bands a python script is done `call_renamebands.sh` 
+    4.1 The script Python script that is called is the `rename_bands_predictions.py` 
+    
 
-4. Se tiene que cambia al folder con los códigos de python y llamar ./python_conta/call_renamebands.sh para hacerlo en baches de años si no se 
-
-4.1 el scrip que cambia le nombre de las bandas por directorio es  ./python_conta/rename_bands_predictions.py
-
- Se hace un folder con todos los archivos para despues hacer las cosas por temporada.
-
-
-5. El scrip que hace esto es ./datos/raster/create_links.sh
+A new folder is made with the link files to the prediction file for each seasonal period. In this example the seasons are restricted to the single year. 
 
 
-Now with the predictions the tensor spline is created
+5. The scrip to create the link is `create_links.sh`
 
-Ya con las predicciones se hace un tensor spline para obtener uno por mes
+Whit the predictions for each season separated the tensor spline for each season is created. 
+
 
 6. It's done inside **R** using the function `get_all_seasons_interval` that is in the `spline_year_predictions.R` file. 
 
