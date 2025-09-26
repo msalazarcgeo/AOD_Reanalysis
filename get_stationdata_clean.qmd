@@ -133,5 +133,9 @@ head(BDA_dia_sr)
 
 ```{r}
 #save to rda file
+<<<<<<< HEAD
 #save(result, file = "../data/R_data/BDA_exemp.Rda")
+=======
+save(result, file = "../data/R_data/BDA_exemp.Rda")
+>>>>>>> 8eacb7a43e4e1926fa4be34063c7668d13559d0b
 ```

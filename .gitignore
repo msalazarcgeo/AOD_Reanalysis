@@ -26,6 +26,7 @@ rsinaica.qmd
 =1.1.0
 R_scripts/test_thing_R.qmd
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 Detailedruning.qmd
 <<<<<<< HEAD
@@ -35,3 +36,5 @@ data/raster/ZMVM_predictions/2022/*
 data/raster/ZMVM_predictions/2022/*
 R_scripts/test.csv
 >>>>>>> 1bc0dcd... to not have any changes
+=======
+>>>>>>> 8eacb7a43e4e1926fa4be34063c7668d13559d0b
