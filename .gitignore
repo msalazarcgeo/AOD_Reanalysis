@@ -25,4 +25,8 @@ rsinaica.qmd
 =1.4.2
 =1.1.0
 R_scripts/test_thing_R.qmd
+<<<<<<< HEAD
+=======
+Detailedruning.qmd
+>>>>>>> 8b32d63... gitigtore to add all the estimations
 data/raster/ZMVM_predictions/2022/*
