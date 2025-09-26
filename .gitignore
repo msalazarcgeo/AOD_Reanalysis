@@ -28,5 +28,10 @@ R_scripts/test_thing_R.qmd
 <<<<<<< HEAD
 =======
 Detailedruning.qmd
+<<<<<<< HEAD
 >>>>>>> 8b32d63... gitigtore to add all the estimations
 data/raster/ZMVM_predictions/2022/*
+=======
+data/raster/ZMVM_predictions/2022/*
+R_scripts/test.csv
+>>>>>>> 1bc0dcd... to not have any changes

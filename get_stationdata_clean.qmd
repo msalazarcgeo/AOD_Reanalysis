@@ -133,5 +133,5 @@ head(BDA_dia_sr)
 
 ```{r}
 #save to rda file
-save(result, file = "../data/R_data/BDA_exemp.Rda")
+#save(result, file = "../data/R_data/BDA_exemp.Rda")
 ```
