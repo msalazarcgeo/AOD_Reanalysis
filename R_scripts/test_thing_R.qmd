@@ -1,0 +1,50 @@
+---
+title: "Untitled"
+format: html
+---
+
+# to make test 
+
+
+
+```{r}
+start_date= "2022-01-01"
+end_date<- "2022-12-31"
+zona_metro<- "ZMVM"
+year<- 2022
+rda_path <- "../data/R_data/BDA_exemp.Rda"
+est_loc_path<- "../data/Estaciones/Coord_estaciones_SINAICA.xlsx"
+path_data_rast_year <- "../data/raster/middle_PBLH/all_bands/2022/"
+path_vialidades <- "../data/Vialidades/ZMVM/all_vialidades_2.tif" 
+
+```
+
+
+```{r}
+df_all <- all_var_dataframe(
+    start_date = start_date,
+    end_date = end_date,
+    zona_metro = zona_metro,
+    year = year,
+    pm_data_stations_path = rda_path,
+    est_coord_path = est_loc_path,
+    path_raster_year = path_data_rast_year,
+    path_raster_vialidades = path_vialidades,
+    prefix_file = "aod_cli_PBLH_"
+    )
+```
+
+
+```{r}
+get_day_values_raster (,
+            path_raster_year, 
+            estation_loc = est_coords_sp, 
+            prefix = ,
+            est_df = estaciones_ubi_df 
+        ,
+        path_rasters,
+        prefix =  "aod_cli_PBLH_ZMVM_",
+        estation_loc ,
+        est_df
+    )
+```
