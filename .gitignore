@@ -27,7 +27,7 @@ rsinaica.qmd
 R_scripts/test_thing_R.qmd
 <<<<<<< HEAD
 <<<<<<< HEAD
-=======
+======
 Detailedruning.qmd
 <<<<<<< HEAD
 >>>>>>> 8b32d63... gitigtore to add all the estimations
@@ -41,3 +41,4 @@ R_scripts/test.csv
 data/data_station_obtained/pm_data_2022.csv
 
 Python_scripts/create_links_local.sh
+data/raster/all_links_ZMVM/*
