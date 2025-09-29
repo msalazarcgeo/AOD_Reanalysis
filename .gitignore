@@ -40,3 +40,4 @@ R_scripts/test.csv
 >>>>>>> 8eacb7a43e4e1926fa4be34063c7668d13559d0b
 data/data_station_obtained/pm_data_2022.csv
 
+Python_scripts/create_links_local.sh
