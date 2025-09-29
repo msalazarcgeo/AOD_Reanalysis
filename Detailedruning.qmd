@@ -73,23 +73,31 @@ The predictions are made using a bash code that runs the R codes, the roads laye
 The file that woork for an entire year is `year_prediction_day_just_script.R` and the call is as follow:
 
 ```bash
-   Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/middle_PBLH/all_bands/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --zona_metro "ZMVM" --file_name_datos_pm "../data/data_station_obtained/pm_data_2022.csv"
+   Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/middle_PBLH/all_bands/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --zona_metro "ZMVM" --file_name_datos_pm "../data/data_station_obtained/pm_data_2022.rda"
 ```
 
 The script take a time interval and obtain the yearly model and available dayly estimations are made. 
 
-After all predictions are made the name ob the bands has to be added, this step could be avoided if thi fix to set the name directly in R. 
+After all predictions are made the name of the bands has to be added, this step could be avoided if thi fix to set the name directly in R. 
 
-4. To change the name bands a python script is done `call_renamebands.sh` 
-    4.1 The script Python script that is called is the `rename_bands_predictions.py` 
+4. To change the name bands a python script is done `./Python_scripts/call_renamebands.sh` for multiple years. 
+    4.1 The script Python script that is called is the `rename_bands_predictions.py` the following is a example for the call for a single year
+
+    ```bash
+    python rename_bands_predictions.py --prediction_path "../data/raster/ZMVM_predictions/2022/"
+    ```
     
 
-A new folder is made with the link files to the prediction file for each seasonal period. In this example the seasons are restricted to the single year. 
+5. When a complete period is done (meaning multiple years), we would like to have the corresponding files in a single folder. The reason is that when the seasonal model is created, the path for each file for all the files to consider for each season would be harder to keep the track of, and the duplication of the data has  to be aoided. So a script is made to create a symbolic link of all the predictions for a metropolitan area in a single folder. 
+
+In this example the single year is obtained but this  .
 
 
-5. The scrip to create the link is `create_links.sh`
+    5.1 The script to create the link is `create_links.sh`, since the links created had to point to a complete path the script has to change for every system. 
 
-Whit the predictions for each season separated the tensor spline for each season is created. 
+
+
+With the predictions for each season separated the tensor spline for each season is created. 
 
 
 6. It's done inside **R** using the function `get_all_seasons_interval` that is in the `spline_year_predictions.R` file. 
