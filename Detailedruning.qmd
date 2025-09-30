@@ -132,6 +132,7 @@ get_all_seasons_interval(
  Se tienen que renombrar la banda en el tensor spline.
 
 7.  To rename the band is done with `./Python_scripts/rename_single_string.py`  in the example only the warm and rainy season are change. 
+
 ```bash 
 python rename_single_string.py --season_spline_path "../data/raster/Season_tensor/ZMVM/2022/"
 
@@ -158,8 +159,23 @@ get_all_days_spline_interval(
     path_save_predictions_2 = "../data/raster/ZMVM_seasons_days/",
     prefix_save_predic_2= "predict_just_warm_"
 )
+
+get_all_days_spline_interval(
+    start_date  = "2022-05-01",
+    end_date = "2022-10-30", 
+    file_path_prediction =  "../data/raster/all_links_ZMVM/",
+    file_path_season_tensor= "../data/raster/Season_tensor/ZMVM/",
+    data_pm_reanalisis_est = "../data/data_station_obtained/", 
+    complete_band =  "temperature_2m",
+    splin_band ="PM25_predict",
+    prefix_predic = "predi_25PM_",
+    path_save_predictions_2 = "../data/raster/ZMVM_seasons_days/",
+    prefix_save_predic_2= "predict_just_rain_"
+)
 ```
 
+
+A bash script is us to move all the files 
 Por como se genera las estimaciones en las funcions model 3 es necesario cambiarlas de lugar  se hace con move_pred_m3.sh
 
 
@@ -167,26 +183,37 @@ Se tienen que renombrar la banda y pegar
 
 Para renombrar la banda utilizamos el script ya hecho 
 
-9. Se hace con el script ./python_cont/rename_single_string.py
-9.1 for YEAR in {2004..2022}; do  python rename_single_string.py --season_spline_path "../datos
-/raster/ZMVM_9PBLH_seasons_days/$YEAR/" --name_band "PM25_predict_spline"; done
+9. Se hace con el script `Python_scripts/rename_single_string.py` and the bash for multiple years is the following :
+```bash 
+for YEAR in {2004..2022}; 
+    do  python rename_single_string.py --season_spline_path "../data/raster/ZMVM_seasons_days/$YEAR/" --name_band "PM25_predict_spline";
+done
+```
 
 
-Se pegan el spline con la prediccion de los datos
 
+10. The spline band is merge with all the other bands for all the year for all the time period. 
+```bash
+ python glue_bands_folder_all.py  --day_season_spline_path "../data/raster/ZMVM_seasons_days/" --day_predictions  "../data/raster/ZMVM_predictions/" --save_path_glue "../datos/raster/ZMVM_prediction_glue/" --start_year "2022" --end_year "2022"
+```
 
-10.  python glue_bands_folder_all.py  --day_season_spline_path "../datos/raster/ZMVM_9PBLH_seasons_days/" --day_predictions  "../datos/raster/ZMVM_predictions_9PBLH/" --save_path_glue "../datos/raster/ZMVM_9PBHL_prediction_glue/" --start_year "2006" --end_year "2022"
 Como se cambio la forma del string del archivo se tuvo que hacer una modificación al programa entonce se utiliza el glue_bands_folder_all_M3.py
 
-10.2.  python glue_bands_folder_all.py  --day_season_spline_path "../datos/raster/ZMVM_9PBLH_seasons_days/" --day_predictions  "../datos/raster/ZMVM_predictions_9PBLH/" --save_path_glue "../datos/raster/ZMVM_9PBHL_prediction_glue/" --start_year "2006" --end_year "2022"
-10.3  python glue_bands_folder_all_M3.py  --day_season_spline_path "../datos/raster/ZMVM_All/model_3_predict/" --day_predictions  "../datos/raster/ZMVM_All/ZMVM_predictions_9PBLH/" --save_path_glue "../datos/raster/ZMVM_All/model_3_glue/" --start_year "2004" --end_year "2022"
+```bash
+python glue_bands_folder_all.py  --day_season_spline_path "../data/raster/ZMVM_seasons_days/" --day_predictions  "../data/raster/ZMVM_predictions/" --save_path_glue "../data/raster/ZMVM_prediction_glue/" --start_year "2022" --end_year "2022"
+```
+
+```bash
+ python glue_bands_folder_all_M3.py  --day_season_spline_path "../data/raster/ZMVM_All/model_3_predict/" --day_predictions  "../data/raster/ZMVM_All/ZMVM_predictions/" --save_path_glue "../data/raster/ZMVM_All/model_3_glue/" --start_year "2004" --end_year "2022"
+ ```
+
+11. The bands has to be mearch into a single one using the script `merge_PM_25_bands`
 
 
-Se tiene que unir las bandas en una sola, esto se hace usando el script merge_PM_25_bands
+```bash 
+ python merge_PM_25_bands.py --path_glue_rasters "../data/raster/ZMVM_prediction_glue/" --save_path_merge "../data/raster/ZMVM_merge_final/" --upper_band "PM25_predict" --under_band "PM25_predict_spline" --merge_band "PM25_merge" --save_prefix "PM25_merge_" --start_year 2022 --end_year 2022 --verbose TRUE
+```
 
-11. python merge_PM_25_bands.py --path_glue_rasters "../datos/raster/ZMVM_9PBHL_prediction_glue/" --save_path_merge "../datos/raster/ZMVM_9PBHL_merge_final/" --upper_band "PM25_predict" --under_band "PM25_predict_spline" --merge_band "PM25_merge" --save_prefix "PM25_merge_" --start_year 2006 --end_year 2022 --verbose TRUE
 
-
-
-Con estos pasos terminamos para hacer todo el proceso de Just. 
+This ends how the estimations are made. 
 
