@@ -42,3 +42,4 @@ data/data_station_obtained/pm_data_2022.csv
 
 Python_scripts/create_links_local.sh
 data/raster/all_links_ZMVM/*
+data/raster/ZMVM_seasons_days/2022/*

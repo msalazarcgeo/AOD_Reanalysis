@@ -160,20 +160,6 @@ get_all_days_spline_interval <- function(
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-knitr::purl("./spline_year_predictions.qmd")
+#knitr::purl("./spline_year_predictions.qmd")
 
 

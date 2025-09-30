@@ -73,7 +73,7 @@ The predictions are made using a bash code that runs the R codes, the roads laye
 The file that woork for an entire year is `year_prediction_day_just_script.R` and the call is as follow:
 
 ```bash
-   Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/middle_PBLH/all_bands/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --zona_metro "ZMVM" --file_name_datos_pm "../data/data_station_obtained/pm_data_2022.rda"
+   Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/middle_PBLH/all_bands/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --zona_metro "ZMVM" --file_name_datos_pm "../data/data_station_obtained/datos_pm_2022.rda"
 ```
 
 The script take a time interval and obtain the yearly model and available dayly estimations are made. 
@@ -88,6 +88,8 @@ After all predictions are made the name of the bands has to be added, this step 
     ```
     
 
+** A folder with all the links is made in order to do the seasonal splines. **
+
 5. When a complete period is done (meaning multiple years), we would like to have the corresponding files in a single folder. The reason is that when the seasonal model is created, the path for each file for all the files to consider for each season would be harder to keep the track of, and the duplication of the data has  to be aoided. So a script is made to create a symbolic link of all the predictions for a metropolitan area in a single folder. 
 
 In this example the single year is obtained but this  .
@@ -97,49 +99,66 @@ In this example the single year is obtained but this  .
 
 
 
-With the predictions for each season separated the tensor spline for each season is created. 
 
 
-6. It's done inside **R** using the function `get_all_seasons_interval` that is in the `spline_year_predictions.R` file. 
+
+6. Now with all the predictions in one place the tensor spline is obtained. This is done inside **R** using the function `get_all_seasons_interval` that is in the `spline_year_predictions.R` file. In order to the spline to be saved, for each **year** in the time period a folder name with the year has to exist.
 
 
 From **R**
-
-> knitr::purl("./spline_year_predictions.qmd")
->get_all_seasons_interval(
-    "./data/raster/all_predictions_symlinks/",
-    "./data/raster/Season_tensor_9PBLH/seasons_total/",
-    "2022",
-    "2009-03-01"
+```r
+source('spline_year_predictions.R')
+#to get all year 
+get_all_seasons_interval(
+    "../data/raster/all_links_ZMVM/",
+    "../data/raster/Season_tensor/ZMVM/",
+    "2022-01-01",
+    "2023-01-01"
     )
 
+#to get a specifyc time period for the warm and rain season 
+
+get_all_seasons_interval(
+    "../data/raster/all_links_ZMVM/",
+    "../data/raster/Season_tensor/ZMVM/",
+    "2022-03-01",
+    "2022-10-31"
+    )
+```
+ 
+ 
+ Now the band of the spline has no name, therefore it has to be renamed. 
+ 
  Se tienen que renombrar la banda en el tensor spline.
 
-7. Se hace con el script ./python_cont/rename_single_string.py
+7.  To rename the band is done with `./Python_scripts/rename_single_string.py`  in the example only the warm and rainy season are change. 
+```bash 
+python rename_single_string.py --season_spline_path "../data/raster/Season_tensor/ZMVM/2022/"
+
+```
+
+The modification with respect to the Just article is done here, the model obtained name 'model 3' is the one tha used to modify and to get a prediction when AOD data is unavailable.
 
 
 
-AQUI es donde tenemos que modificar para tomar en consideración el cambio en las estimaciones usando el modelo 3.  Se usa el spline y se modifica para obtener una predicción 
-cuando no se tiene AOD 
-
-Se hace la prediccion diaria por temporada con la función en R
-
-8. Se hace desde R con la función  get_all_days_spline_interval que se encuentra en spline_year_predictions.qmd
+8. The daily prediction is made using the function `get_all_days_spline_interval` inside the `spline_year_predictions` file.
 
 
-
-> get_all_days_spline_interval(
-    start_date  = "2004-03-01",
-    end_date = "2004-04-30", 
-    file_path_prediction =  "./datos/raster/all_predictions_symlinks/",
-    file_path_season_tensor= "./datos/raster/Season_tensor_9PBLH/seasons_total/",
-    data_pm_reanalisis_est = "./datos/datos_predic/", 
+```R
+source('spline_year_predictions.R')
+get_all_days_spline_interval(
+    start_date  = "2022-03-01",
+    end_date = "2022-04-30", 
+    file_path_prediction =  "../data/raster/all_links_ZMVM/",
+    file_path_season_tensor= "../data/raster/Season_tensor/ZMVM/",
+    data_pm_reanalisis_est = "../data/data_station_obtained/", 
     complete_band =  "temperature_2m",
     splin_band ="PM25_predict",
     prefix_predic = "predi_25PM_",
-    path_save_predictions_2 = "./datos/raster/ZMVM_9PBLH_seasons_days/",
+    path_save_predictions_2 = "../data/raster/ZMVM_seasons_days/",
     prefix_save_predic_2= "predict_just_warm_"
 )
+```
 
 Por como se genera las estimaciones en las funcions model 3 es necesario cambiarlas de lugar  se hace con move_pred_m3.sh
 
