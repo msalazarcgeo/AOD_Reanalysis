@@ -1,6 +1,6 @@
 #| label: load-libraries
 #| include: false
-pacman::p_load(tidyverse, sf, lubridate, ggplot2, ggpmisc, lme4, gridExtra, magrittr, dplyr, geosphere, Metrics, ggridges, reshape2, gstat, raster, spacetime, rlang, geoR, multilevelTools, readxl, mgcv)
+pacman::p_load(tidyverse, sf, lubridate, ggplot2, ggpmisc, lme4, gridExtra, magrittr, dplyr, geosphere, Metrics, ggridges, reshape2, gstat, raster, spacetime, rlang, multilevelTools, readxl, mgcv)
 
 
 
