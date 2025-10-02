@@ -1,0 +1,20 @@
+#!/bin/bash
+
+for DIR in ./*;
+do for FILE in $DIR/*;
+   do readarray -d "_" -t strarr <<< "$FILE"
+      
+      if [ ${strarr[3]} != ${strarr[4]} ]; then
+      	  echo "${strarr[3]}"
+	  echo "${strarr[4]}"
+	  readarray -d "/" -t arrmove <<< "$FILE"
+	  endarr=${#arrmove[@]}
+	  echo mv $FILE ./${strarr[4]}/${arrmove[@]:2:$endarr}
+	  mv $FILE ./${strarr[4]}/${arrmove[@]:2:$endarr}
+	  
+      fi
+	 
+   done
+done
+
+
