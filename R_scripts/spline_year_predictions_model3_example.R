@@ -1,155 +1,19 @@
----
-title: "Generación del modelo 3 "
-toc: true
-number-sections: true
-format: 
-    html:
-        code-fold: true
-    pdf:
-        geometry: 
-        - top=30mm
-        - left=20mm
-        shift-heading-level-by: -1
----
-
-
-El notebook se hace para generar un script con la segunda parte del algoritmo de Just usando la version del modelo 3 
-
-
-
-$$
-\sqrt{predPM_{i,j}} = \alpha +\beta_1 \sqrt{MPM_j} + \beta_2\sqrt{S(X_i,Y_i)}_{k(j)} + \epsilon
-$$
-
-Vamos a obtener todos los datos que se necesitan pero usando las prediciones. 
-
-
-```{r}
-#| purl: false
+## -----------------------------------------------------------------------------
+#| purl: true
 #| echo: false
 rm(list = ls())
 if (!require("pacman")) install.packages("pacman");
 
-pacman::p_load(tidyverse, sf, lubridate, ggplot2, ggpmisc, lme4, gridExtra, magrittr, dplyr, geosphere, Metrics,MLmetrics, ggridges, reshape2, gstat, raster,tibble, spacetime, rlang, geoR, multilevelTools, readxl, mgcv, rgdal, knitr)
+pacman::p_load(tidyverse, sf, lubridate, ggplot2, ggpmisc, lme4, gridExtra, magrittr, dplyr, geosphere, Metrics,MLmetrics, ggridges, reshape2, gstat, raster,tibble, spacetime, rlang,  multilevelTools, readxl, mgcv, knitr)
 
 source("./Just_todo_process.R")
 source("./Just_todo_2.R")
 source("./spline_year_predictions.R")
 source("./year_prediction_day_just.R")
 
-load("./datos/datos_limpios_03_2023/BDA_dia_sr.Rda")
 
-```
-
-
-
-Funciones para generar los modelos y estimaciones 
-```{r}
-#| purl: false
-#| echo: false
-BDA_dia <- BDA_dia_sr  %>% 
-    as_tibble() %>% 
-    filter(
-        grepl("ZMVM" , BDA_dia_sr$CVE_EST ) 
-    )%>%
-    dplyr::select(
-        CVE_EST,
-        FECHA,
-        PM2.5_S50,
-        PM2.5_S60,
-        PM2.5_S75)%>%
-    mutate(
-        CVE_EST= as.character(CVE_EST),
-        dia = date(FECHA)
-    )%>%
-    filter(
-     !is.na(PM2.5_S50)
-    )
-
-
-path_est_loc = "./datos/Estaciones/Coord_estaciones_SINAICA.xlsx"
-
-estaciones_ubi <- read_excel(path_est_loc)%>%
-    mutate(   
-        Latitud = as.numeric(LAT ),
-        Longitud = as.numeric(LONG)
-    )
-estaciones_ubi <-estaciones_ubi[estaciones_ubi$CVE_EST %in%  unique(BDA_dia$CVE_EST ), ]
-est_coords <- estaciones_ubi[, c("Longitud", "Latitud")]%>%
-    rename(latitude = Latitud, longitude = Longitud)
-
-est_coords <- SpatialPoints(est_coords)
-raster::crs(est_coords) <- "+proj=longlat +datum=WGS84"
-```
-
-Como ya se hicieron muchas de las cosas y se tuvo cuidado en como se hace vamos a usar las funciones que ya se programaron, se tiene que modificar las cosas por que no son los mismo. 
-
-
-
-Es necesario obtener un dataframe con todos los splines de la ZMVM
-
-
-
-
-```{r}
-#| purl: false
-#| echo: false
-
-path_splines = './datos/raster/ZMVM_All/seasons_total_ZMVM'
-dirlist <- list.dirs(path_splines, recursive = FALSE)
-dirlist <- dirlist[sapply(dirlist, function(x) length(list.files(x))>0)]
-df_list <- list() 
-counter0<- 1
-for(dir_pa in dirlist){
-    print(dir_pa)
-    dir_val <- list.dirs(dir_pa)
-    dir_val <- dir_val[sapply(dir_val, function(x) length(list.files(x))>0)]
-    year_spli <- sub(".*/", "", dir_val[1])
-    files_station  <- list.files(dir_val, full.name= TRUE, patter= "[.tiff]")
-    est_season_val <- list() 
-    counter<-1
-
-    for(file_rast in files_station){
-        estation<- str_split(file_rast , "/")[[1]][[6]]
-        season_name <- sub(".*/", "", file_rast)
-        season_name <- sub("\\.[^\\.]*$", "", season_name)
-        print(season_name)
-        raster_season <- raster::brick(file_rast)
-        estation_spline_val <- as.data.frame(raster_season, xy=TRUE)
-        
-        estation_spline_val <-  estation_spline_val[,c("x","y", "Spline")]
-        estation_spline_val$y <- rowFromY(raster_season, estation_spline_val$y)
-        estation_spline_val$x <- colFromX(raster_season, estation_spline_val$x)
-        col_na<- season_name
-        estation_spline_val[, col_na] <- estation_spline_val$Spline
-        estation_spline_val <- estation_spline_val[, c("x","y",col_na)]
-        est_season_val[[counter]] <- estation_spline_val
-        names(est_season_val)[[counter]] <- season_name
-        counter <- counter+1
-    } 
-    if(length(est_season_val)>0 ){
-        df_list[[counter0]] <- est_season_val %>% reduce(left_join, by = c("x"="x","y"= "y" ))
-        names(df_list)[[counter0]] <- year_spli
-        counter0 <- counter0+1
-     
-    }
-    
-}
-```
-
-```{r}
-#| purl: false
-#| echo: false
-#| eval: false
-# Juntar los dataframes y almacenar
-
-df_list <-df_list %>% reduce(left_join, by = c("x"="x","y"= "y" ))
-write.csv(df_list, file='./datos/datos_model3/cell_vals_ses_on_splinesestation.csv')
-head(test_df )
-```
-
-```{r}
-#| purl: false
+## -----------------------------------------------------------------------------
+#| purl: true
 #| echo: false
 
 #' Get the dataframe for the season  
@@ -242,32 +106,12 @@ get_dataframe_season_spline <- function(
     
     return(df_estas_day_pred_te)
 }
-```
-
-```{r}
-
-df_te_se <- get_dataframe_season_spline(
-    path_spline = './datos/datos_model3/cell_vals_ses_on_splinesestation.csv',
-    season_str = 'warm',
-    year_string = '2011',
-    path_prediction = "./datos/raster/ZMVM_All/all_predictions_symlinks_ZMVM/",
-    predi_prefix = 'predi_25PM_' ,
-    str_band= 'PM25_predict',
-    string_zm = ''
-)
-head(df_te_se)
-```
 
 
-Se modifica la función que se utilizó para obtener los datos de laa validación cruzada, se tiene que obtener el modelo usando el promedio diario en las esttaciones. 
-
-
-Ya con el modelo se tiene que hacer la predicción para todas las celdas en todos los días de la temporada. 
-
-```{r}
-#| purl: false
+## -----------------------------------------------------------------------------
+#| purl: true
 #| echo: false
-#| 
+
 #' Get a data frame with x y coordinates and all the values
 #'  start_date, # initial date season
 #' @param end_date, # final date season
@@ -376,32 +220,13 @@ model3_prediction_daily_season_df <- function(
     }
     return(list_dias_df_li)
 }
-```
 
 
 
 
-```{r}
-
-df_pred_warm_2011 <- model3_prediction_daily_season_df( 
-    start_date = '2011-03-01',
-    end_date   = '2011-04-30',
-    path_predictions= "./datos/raster/ZMVM_All/all_predictions_symlinks_ZMVM/",
-    season_str = 'warm',
-    year_string = '2011',
-    predi_prefix =  'predi_25PM_' ,
-    str_band  ='PM25_predict',
-    string_zm   = 'ZMVM',
-    est_ubi_loc =  estaciones_ubi ,
-    season_path_spline_df ='./datos/datos_model3/cell_vals_ses_on_splinesestation.csv',
-    season_path_spline = './datos/raster/ZMVM_All/seasons_total_ZMVM/',
-    df_est_data  = BDA_dia
-)
-
-```
-
-
-```{r}
+## -----------------------------------------------------------------------------
+#| purl: true
+#| echo: false
 
 #' The function saves the corresponding day of the dataframe as rassters 
 #' @param df_predictions dataframe with the daily data and predictions 
@@ -462,27 +287,13 @@ save_days_df_2_raster <- function(
     return()
 }
 
-```
 
 
 
-```{r}
-df_pred_warm_2011_f<- bind_rows( df_pred_warm_2011)
-raster_complete <- raster::brick("./datos/raster/ZMVM_All/all_predictions_symlinks_ZMVM/predi_25PM_2004_01_01.tif")
-csr_obj_to_<- crs(raster_complete)
-extent_obj_to_ <- extent(raster_complete)  
-save_days_df_2_raster(
-    df_pred_warm_2011_f,
-    "./datos/raster/ZMVM_All/model_3_test/",
-    "pred_mod3_",
-    csr_obj_to_,
-    extent_obj_to_ 
-)
-```
 
-
-Función que integra todo para una temporada 
-```{r}
+## -----------------------------------------------------------------------------
+#| purl: true
+#| echo: false
 predic_season_all_m3 <- function(
     season_str, 
     season_year, 
@@ -531,93 +342,8 @@ predic_season_all_m3 <- function(
 }
 
 
-
-
-
-```
-
-```{r}
-predic_season_all_m3(
-    season_str = "warm",
-    season_year = "2011",
-    start_date = '2011-03-01',
-    end_date = '2011-04-30',
-    path_predictions = "./datos/raster/ZMVM_All/all_predictions_symlinks_ZMVM/",
-    str_zm = 'ZMVM',
-    predi_prefix = 'predi_25PM_' ,
-    str_band = 'PM25_predict',
-    est_ubi_loc = estaciones_ubi,
-    path_good_raster = "./datos/raster/ZMVM_All/all_predictions_symlinks_ZMVM/predi_25PM_2004_01_01.tif",
-    season_path_spline_df = './datos/datos_model3/cell_vals_ses_on_splinesestation.csv',
-    season_path_spline = './datos/raster/ZMVM_All/seasons_total_ZMVM/',
-    df_est_data = BDA_dia, 
-    path_save_pred_m3 = "./datos/raster/ZMVM_All/model_3_test/warm_2011/",
-    prefix_pred_m3 = paste0("pred_m3_","warm", "_", "2011")
-)
-
-
-
-
-```
-
-```{r}
-#| purl: false
-list_dirs_est <- list.dirs("./datos/raster/Cross_val/ALL_links")[-1]
-
-list_dirs_est <- tail(list_dirs_est, n=length(list_dirs_est)-24) ### Por que ya se hizo el primero 
-
-
-for( dir_est in list_dirs_est){
-    print(dir_est)
-    files_est_year <- list.files(dir_est)
-    first_year <- str_split(sort(files_est_year)[1], "_")[[1]][5]
-    first_day <- substr(str_split(sort(files_est_year)[1], "_")[[1]][7],1,2)
-    first_month <- str_split(sort(files_est_year)[1], "_")[[1]][6]
-    
-    final_year <- str_split(tail(sort(files_est_year), n=1), "_")[[1]][5]
-    last_day <- substr(str_split( tail(sort(files_est_year), n=1), "_")[[1]][7],1,2)
-    last_month <- str_split(tail(sort(files_est_year), n=1), "_")[[1]][6]
-
-    estation <- str_split(dir_est, "/")[[1]][6]
-    print(first_year)
-    print(final_year)
-
-    for(year_s in  as.integer(first_year):as.integer(final_year)){
-        if(year_s == first_year){
-            start_date = paste0(year_s,
-                "-",
-                first_month,
-                "-",
-                first_day)
-            end_date =   paste0(year_s+1,"-04-30")
-        }
-        else if(year_s == final_year){
-            start_date = paste0(year_s,"-03-01")
-            end_date =   paste0(year_s,"-12-31")
-        }
-        else{
-            start_date = paste0(year_s,"-03-01")
-            end_date =   paste0(year_s+1,"-04-30")
-        }
-        print(start_date)
-        print(end_date)
-        print(dir_est)
-        get_all_seasons_interval(
-            paste0(dir_est,"/"),
-            paste0("./datos/raster/Cross_val/splines/",
-                estation,
-                "/" 
-                ),
-            start_date,
-            end_date
-        )
-    }
-}
-```
-
-
-```{r}
-#| purl: false
+## -----------------------------------------------------------------------------
+#| purl: true
 #| echo: false
 get_dates_season <- function(season_str){
     split_ <-str_split(season_str, '_')[[1]]
@@ -643,68 +369,5 @@ get_dates_season <- function(season_str){
     names(dates_ret)<- c("start_date","end_date" )
     return(dates_ret)
 }
-
-```
-
-```{r}
-
-
-get_dates_season("warm_2012")
-
-
-
-```
-
-
-
-
-
-```{r}
-#| purl: false
-
-invierno <-"predict_just_cold_"
-caliente <-"predict_just_warm_"
-lluvia <-"predict_just_rain_"
-seasons <- c(invierno ,caliente ,lluvia )
-```
-
-En la siguiente  celda de código hacemos todas las predicciones para los dias que se pueden hacer. 
-
-```{r}
-te <- read.csv( './datos/datos_model3/cell_vals_ses_on_splinesestation.csv', # Read only header of example data
-           head = TRUE,
-           nrows = 1
-           )
-seasons_avilable<- names(te)[4:ncol(te)]
-
-for (season_st in seasons_avilable){
-    print(season_st)
-    vec_dates <- get_dates_season(season_st)
-    vec_se_year <- str_split( season_st, "_")  
-    season_str_s <- vec_se_year[[1]][1]
-    season_year_s<- vec_se_year[[1]][2]
-    predic_season_all_m3(
-        season_str = season_str_s,
-        season_year = season_year_s,
-        start_date = vec_dates[[1]],
-        end_date = vec_dates[[2]],
-        path_predictions = "./datos/raster/ZMVM_All/all_predictions_symlinks_ZMVM/",
-        str_zm = 'ZMVM',
-        predi_prefix = 'predi_25PM_' ,
-        str_band = 'PM25_predict',
-        est_ubi_loc = estaciones_ubi,
-        path_good_raster = "./datos/raster/ZMVM_All/all_predictions_symlinks_ZMVM/predi_25PM_2004_01_01.tif",
-        season_path_spline_df = './datos/datos_model3/cell_vals_ses_on_splinesestation.csv',
-        season_path_spline = './datos/raster/ZMVM_All/seasons_total_ZMVM/',
-        df_est_data = BDA_dia, 
-        path_save_pred_m3 = paste0("./datos/raster/ZMVM_All/model_3_predict/",
-            season_year_s, "/"
-            ),
-        prefix_pred_m3 = paste0("pred_m3_",season_str_s, "_", season_year_s)
-    )
-}
-```
-
-## Final 
 
 

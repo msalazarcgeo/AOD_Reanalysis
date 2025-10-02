@@ -141,6 +141,11 @@ python rename_single_string.py --season_spline_path "../data/raster/Season_tenso
 The modification with respect to the Just article is done here, the model obtained name 'model 3' is the one tha used to modify and to get a prediction when AOD data is unavailable.
 
 
+The model is change here I have to upload the other function in to a single file and add al the functions to the file into a single script
+
+
+
+
 
 8. The daily prediction is made using the function `get_all_days_spline_interval` inside the `spline_year_predictions` file.
 
