@@ -134,7 +134,7 @@ get_all_seasons_interval(
 7.  To rename the band is done with `./Python_scripts/rename_single_string.py`  in the example only the warm and rainy season are change. 
 
 ```bash 
-python rename_single_string.py --season_spline_path "../data/raster/Season_tensor/ZMVM/2022/"
+python rename_single_string.py --season_spline_path "../data/raster/Season_tensor_ZMVMZMVM/2022/"
 
 ```
 
@@ -145,9 +145,7 @@ The model is change here I have to upload the other function in to a single file
 
 
 
-
-
-8. The daily prediction is made using the function `get_all_days_spline_interval` inside the `spline_year_predictions` file.
+8. The daily prediction is made using the function `get_all_days_spline_interval` inside the `spline_year_predictions` file. A more detail example can be found in `spline_year_predictions_model3_example.qmd` and the corresponding R script `spline_year_predictions_model3_example.R` can be use to get all the season data and the corresponding daily season estimation. 
 
 
 ```R
@@ -180,15 +178,13 @@ get_all_days_spline_interval(
 ```
 
 
-A bash script is us to move all the files 
-Por como se genera las estimaciones en las funcions model 3 es necesario cambiarlas de lugar  se hace con move_pred_m3.sh
+A bash script is use to move the files, since the daily files are obtain using the specific season, therefore the days that not correspond to the years are in the next year. The bas file move to the correct year. The bash script is `move_pred_m3.sh`
 
 
-Se tienen que renombrar la banda y pegar
 
-Para renombrar la banda utilizamos el script ya hecho 
 
-9. Se hace con el script `Python_scripts/rename_single_string.py` and the bash for multiple years is the following :
+9. To rename the band is done with the script `Python_scripts/rename_single_string.py` and the bash for multiple years is the following :
+
 ```bash 
 for YEAR in {2004..2022}; 
     do  python rename_single_string.py --season_spline_path "../data/raster/ZMVM_seasons_days/$YEAR/" --name_band "PM25_predict_spline";
@@ -196,23 +192,15 @@ done
 ```
 
 
-
 10. The spline band is merge with all the other bands for all the year for all the time period. 
+
+
+
 ```bash
- python glue_bands_folder_all.py  --day_season_spline_path "../data/raster/ZMVM_seasons_days/" --day_predictions  "../data/raster/ZMVM_predictions/" --save_path_glue "../datos/raster/ZMVM_prediction_glue/" --start_year "2022" --end_year "2022"
+python glue_bands_folder_all_M3.py  --day_season_spline_path "../data/raster/ZMVM_seasons_m3/" --day_predictions  "../data/raster/ZMVM_predictions/" --save_path_glue "../data/raster/ZMVM_prediction_glue/" --start_year "2022" --end_year "2022"
 ```
 
-Como se cambio la forma del string del archivo se tuvo que hacer una modificación al programa entonce se utiliza el glue_bands_folder_all_M3.py
-
-```bash
-python glue_bands_folder_all.py  --day_season_spline_path "../data/raster/ZMVM_seasons_days/" --day_predictions  "../data/raster/ZMVM_predictions/" --save_path_glue "../data/raster/ZMVM_prediction_glue/" --start_year "2022" --end_year "2022"
-```
-
-```bash
- python glue_bands_folder_all_M3.py  --day_season_spline_path "../data/raster/ZMVM_All/model_3_predict/" --day_predictions  "../data/raster/ZMVM_All/ZMVM_predictions/" --save_path_glue "../data/raster/ZMVM_All/model_3_glue/" --start_year "2004" --end_year "2022"
- ```
-
-11. The bands has to be mearch into a single one using the script `merge_PM_25_bands`
+11. The bands has to be merge into a single one using the script `merge_PM_25_bands`
 
 
 ```bash 

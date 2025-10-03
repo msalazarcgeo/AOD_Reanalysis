@@ -33,8 +33,6 @@ pacman::p_load(tidyverse, sf, lubridate, ggplot2, ggpmisc, lme4, gridExtra, magr
 
 source("./Just_todo_process.R")
 source("./Just_todo_2.R")
-source("./spline_year_predictions.R")
-source("./year_prediction_day_just.R")
 ```
 
 ```{r}
@@ -134,11 +132,12 @@ get_all_seasons_interval(
     )
 ```
 
-A call for each season can be made, this function cam be automatize to do it for all the period bu this is only an example. 
+A call for each season can be made, this function cam be automatize to do it for all the period but this is only an example. 
+
 The last season tensor is unable to get because there is not  enought data. 
 
-
-Here the band names has to be rename usin a python script in order the daily stimation could be done. 
+s
+Here the band names has to be rename using a python script in order the daily stimation could be done. 
 
 
 ## Daily Spline diario
@@ -271,4 +270,4 @@ get_all_days_spline_interval_metro(
     prefix_save_predic_2= "pred_mod_3_rain_",
 )
 ```
-A file to move the daily file to the corresponding year si made call `movev_pred_m3.sh`  this file should move the data using the prefic, in this example is no useful. 
+A file to move the daily file to the corresponding year si made call `movev_pred_m3.sh`  this file should move the data using the prefix, in this example is no useful. 
