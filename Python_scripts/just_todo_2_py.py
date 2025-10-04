@@ -140,7 +140,7 @@ def merge_pm25_bands(
         print('No upper band, no merge of band is done and no file created')
         return
 
-       
+    
     upper_band = raster_bands_all.read(raster_bands_all.descriptions.index(band_upper)+1, masked= True)
     under_band = raster_bands_all.read(raster_bands_all.descriptions.index(band_under)+1, masked= True)
 

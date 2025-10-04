@@ -48,3 +48,4 @@ data/raster/ZMVM_seasons_m3/2022/*
 data/raster/ZMVM_seasons_m3/move_pred_m3.sh
 Detailedruning.qmd
 data/raster/ZMVM_prediction_glue/2022/*
+data/raster/ZMVM_merge_final/2022/*

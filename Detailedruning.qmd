@@ -189,8 +189,13 @@ A bash script is use to move the files, since the daily files are obtain using t
 for YEAR in {2004..2022}; 
     do  python rename_single_string.py --season_spline_path "../data/raster/ZMVM_seasons_days/$YEAR/" --name_band "PM25_predict_spline";
 done
-```
 
+```
+or a single folder 
+
+```bash
+python rename_single_string.py --season_spline_path ../data/raster/ZMVM_seasons_m3/2022/  --name_band "PM25_predict_spline
+```
 
 10. The spline band is merge with all the other bands for all the year for all the time period. 
 
