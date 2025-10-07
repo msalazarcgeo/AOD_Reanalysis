@@ -9,7 +9,7 @@ The scrips will be added, and the basic usage will be explained here.
 
 All the data was downloaded from the sources describe in the article.
 
-## Data gattering
+## Data gathering
 
 -   The data from the *ECMWF* the Planetary boundary layer his downloaded obtain using the `get_average_grib.py`
 
