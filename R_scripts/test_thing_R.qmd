@@ -5,7 +5,9 @@ format: html
 
 # to make test 
 
-
+```{r}
+pacman::p_load(readxl, sf)
+```
 
 ```{r}
 start_date= "2022-01-01"
@@ -16,7 +18,8 @@ rda_path <- "../data/R_data/BDA_exemp.Rda"
 est_loc_path<- "../data/Estaciones/Coord_estaciones_SINAICA.xlsx"
 path_data_rast_year <- "../data/raster/middle_PBLH/all_bands/2022/"
 path_vialidades <- "../data/Vialidades/ZMVM/all_vialidades_2.tif" 
-
+prefix_save <- "predi_25PM_"
+path_save_raster = "../data/raster/ZMVM_predictions/"
 ```
 
 
@@ -33,18 +36,93 @@ df_all <- all_var_dataframe(
     prefix_file = "aod_cli_PBLH_"
     )
 ```
+get station contaminants 
+```{r}
+bd_dia_test <- get_contaminant_df(
+    pm_data_stations_path = rda_path,
+    zona_metro = zona_metro,
+     year=year)
+```
+
+Get the estation location from files
+
+```{r}
+station_loc_test <- station_loc(
+    path_est_loc = est_loc_path,
+    df_contaminants= bd_dia_test,
+    verbose=TRUE)
+    print("Load Estation_data")
+    print(est_coord_path)
+    estaciones_ubi_df_test <- station_loc_test[[1]]  
+    est_coords_sp <- station_loc_test[[2]]  
+```
+
+```{r}
+df_ras_rea<- get_day_values_raster (
+    dia = "2022_01_01",
+    path_rasters= path_data_rast_year,
+    estation_loc = est_coords_sp,
+    prefix = "aod_cli_PBLH_",
+    est_df= estaciones_ubi_df_test
+) 
+```
+
+```{r}
+
+```
+
+```{r}
+get_raster_predictions(
+        start_date= as.Date("2022_01_01", format='%Y_%m_%d'), 
+        end_date= as.Date("2022_12_31", format='%Y_%m_%d'),
+        path_rasters = path_data_rast_year ,
+        path_raster_vialidades=path_vialidades,
+        coef_table,
+        df_scalars_values,
+        path_save_rasters,
+        zona_metro = zona_metro,
+        prefix_save = prefix_save )
+```
 
 
 ```{r}
-get_day_values_raster (,
-            path_raster_year, 
-            estation_loc = est_coords_sp, 
-            prefix = ,
-            est_df = estaciones_ubi_df 
-        ,
-        path_rasters,
-        prefix =  "aod_cli_PBLH_ZMVM_",
-        estation_loc ,
-        est_df
+vialidades_1 <- raster(path_vialidades,1)
+vialidades_2 <- raster(path_vialidades,2)
+vialidades_3 <- raster(path_vialidades,3)
+vialidades <- vialidades_1 + vialidades_2 + vialidades_3
+```
+```{r}
+raster_testi <-pre_ras_pm25_dia(
+            "2022_01_02", 
+            path_rasters, 
+            prefix = prefix_file,
+            coeff_df_model = coef_table,
+            scale_values_df= df_scale, 
+            vialidades_r = vialidades
+        )
+```
+
+
+```{r}
+df_all_data  <- all_var_dataframe(
+        start_date,
+        end_date,
+        zona_metro,
+        year,
+        rda_path,
+        est_loc_path,
+        path_data_rast_year,
+        path_vialidades,
+        
     )
+```
+
+
+```{r}
+save(df_all_data_scale, file = "test.csv")
+```
+
+
+```{r}
+file_name_raster <- "../data/raster/middle_PBLH/all_bands/2022/aod_cli_PBLH_2022_01_02.tif"
 ```
