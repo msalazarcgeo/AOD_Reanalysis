@@ -1,6 +1,9 @@
 ---
 title: "Modeling in Mexican Cities using using Aerosol Optical Depth and Meteorological Reanalysis Data"
-format: html
+format: 
+    html: default
+    pdf: default
+editor: source
 ---
 
 This is a tutorial explaining the basic usage of the scripts to obtain the result of the *"Modeling in Mexican Cities using Aerosol Optical Depth and Meteorological Reanalysis Data"* article
