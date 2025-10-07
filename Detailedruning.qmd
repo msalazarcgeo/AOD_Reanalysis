@@ -3,110 +3,89 @@ title: "Modeling in Mexican Cities using using Aerosol Optical Depth and Meteoro
 format: html
 ---
 
+This is a tutorial explaining the basic usage of the scripts to obtain the result of the *"Modeling in Mexican Cities using Aerosol Optical Depth and Meteorological Reanalysis Data"* article
 
-This is a tutorial explainig the basic usage of the the scripts to obthain the result of the *"Modeling in Mexican Cities using  Aerosol Optical Depth and Meteorological Reanalysis Data"* article 
+The scrips will be added, and the basic usage will be explained here.
 
+All the data was downloaded from the sources describe in the article.
 
-The scrips will be added and the basic usage will be explain here. 
+## Data gattering
 
+-   The data from the *ECMWF* the Planetary boundary layer his downloaded obtain using the `get_average_grib.py`
 
-All the data was downloaded from the sources describe in the article. 
+-   Data from the GEE is obtained using the notebook './Python_scripts/get_years_GEE_data_fix.ipynb' and chance accordantly.
 
+-   Data from the stations is obtained using the API from SINAICA.
 
+## With all the data
 
-## Data gattering 
-* The data from the *ECMWF* the Planetary boundary layer his downloaded obtain using the  get_average_grib.py
+1.  Daily Planetary Boundary layer with a single raster use the `./Python_scripts/get_average_grib.py`
 
-* Data from the GEE is obtained using the notebook './Python_scripts/get_years_GEE_data_fix.ipynb' and chanche acordently.
-
-* Data from the stations is obtaine using the API from SINAICA. 
-
-
-
-
-
-
-## With all the data 
-
-1. Daily Panetary Boundary layer with a single raster use the `./Python_scripts/get_average_grib.py`
-
-```bash
+``` bash
 python python ./Python_scripts/get_average_grib.py  --grib_file "./data/ECMWF/2022_PBLH.grib" --path_dir_day_average './data/raster/ECMWF_rasters/2022/' --initial_day "2022-01-01" --final_day "2022-12-31"
 ```
 
-For the one of the metropolitan areas and merge with the data Downloades from GEE
+For the one of the metropolitan areas and merge with the data Downloaded from GEE
 
-2. All the bands with  `./Python_scripts/get_res_cut_merge.py`
+2.  All the bands with `./Python_scripts/get_res_cut_merge.py`
 
-```bash
+``` bash
 
  python ./Python_scripts/get_res_cut_merg.py --grib_file ./data/ECMWF/2022_PBLH.grib  --path_dir_day_average ./data/raster/ECMWF_rasters/2022/ --path_dir_multy_band ./data/raster/AOD_REA_GEE/ZMVM/2022/ --path_dir_resample ./data/raster/middle_PBLH/resample/2022/ --path_dir_cut ./data/raster/middle_PBLH/cut/2022/  --path_dir_merge ./data/raster/middle_PBLH/all_bands/2022/ --file_metropolitan_polygon ./data/Zonas_metro/ZMVM.shp
 ```
 
-
-::: {.callout-warning }
-The data in the folders has to be complete (all day tor the year for bouth, the PBLH rasters and the AOD_reanalisys data) if not an error occur. 
+::: callout-warning
+The data in the folders has to be complete (all day for the year for both, the PBLH rasters and the AOD_reanalisys data) if not an error occur.
 :::
 
-The predictions are made using a bash code that runs the R codes, the roads layer had to be readable form R. 
+The predictions are made using a bash code that runs the R codes, the roads layer had to be readable form R.
 
+3.  All is done using the `./R_scripts/multiple_yearpredictions.sh` file.
 
+    -   The R script does all for a time interval is `./year_prediction_day_just_script.R` is a wrapper of the `year_prediction_day_just_script.sh` that calls the functions created in R to call all the necessary data
 
+        -   --path_estations_cont is the path where the data from the stations are store, this data is the one with the daily stations,
+        -   --path_estations_location
+        -   --path_estations_location
+        -   --path_save_coef
+        -   --path_data_raster
+        -   --path_vialidades
+        -   -s Start date
+        -   -e End date
+        -   --year The year that is being done\
+        -   --file_name_datos_pm path to a file to store the pm data.
 
+The file that work for an entire year is `year_prediction_day_just_script.R` and the call is as follows:
 
-3.  All is done using the ` ./R_scripts/multiple_yearpredictions.sh` file. 
-
-    * The R scrtipt does all for a time interval is `./year_prediction_day_just_script.R` is a wrapper of the `year_prediction_day_just_script.sh` that calls the functions created in R to call all the necesary data 
-
-        * --path_estations_cont is the path where the data from the stations are store, this data is the one with the daily stations, 
-        * --path_estations_location 
-        * --path_estations_location
-        * --path_save_coef
-        * --path_data_raster
-        * --path_vialidades
-        * -s Start date
-        * -e End date 
-        * --year The year that is been done  
-        * --file_name_datos_pm path to a file to store the pm data. 
-
-
-The file that work for an entire year is `year_prediction_day_just_script.R` and the call is as follow:
-
-```bash
+``` bash
    Rscript year_prediction_day_just_script.R --path_estations_cont "../data/R_data/BDA_exemp.Rda" --path_estations_location "../data/Estaciones/Coord_estaciones_SINAICA.xlsx" --path_save_predictions "../data/raster/ZMVM_predictions/2022/" --prefix_save "predi_25PM_" --path_save_coef "../data/coefficient_models/" --path_data_raster "../data/raster/middle_PBLH/all_bands/2022/" --path_vialidades "../data/Vialidades/ZMVM/all_vialidades_2.tif" -s "2022-01-01" -e "2022-12-31" --year 2022 --zona_metro "ZMVM" --file_name_datos_pm "../data/data_station_obtained/datos_pm_2022.rda"
 ```
 
-The script take a time interval and obtain the yearly model and available dayly estimations are made. 
+The script take a time interval and obtain the yearly model and available daily estimations are made.
 
-After all predictions are made the name of bands has to be added, this step could be avoided if thi fix to set the name directly in R. 
+After all predictions are made the name of bands has to be added, this step could be avoided if this fix to set the name directly in R.
 
-4. To change the name bands a python script is done `./Python_scripts/call_renamebands.sh` for multiple years. 
-    4.1 The script Python script that is called is the `rename_bands_predictions.py` the following is a example for the call for a single year
+4.  To change the name bands a python script is done `./Python_scripts/call_renamebands.sh` for multiple years. 4.1 The script Python script that is called is the `rename_bands_predictions.py` the following is an example for the call for a single year
 
-    ```bash
+    ``` bash
     python rename_bands_predictions.py --prediction_path "../data/raster/ZMVM_predictions/2022/"
     ```
-    
 
-** A folder with all the links is made in order to do the seasonal splines. **
+\*\* A folder with all the links is made in order to do the seasonal splines. \*\*
 
-5. When a complete period is done (meaning multiple years), we would like to have the corresponding files in a single folder. The reason is that when the seasonal model is created, the path for each file for all the files to consider for each season would be harder to keep the track of, and the duplication of the data has  to be aoided. So a script is made to create a symbolic link of all the predictions for a metropolitan area in a single folder. 
+5.  When a complete period is done (meaning multiple years), we would like to have the corresponding files in a single folder. The reason is that when the seasonal model is created, the path for each file for all the files to consider for each season would be harder to keep the track of, and the duplication of the data has to be avoided. So a script is made to create a symbolic link of all the predictions for a metropolitan area in a single folder.
 
-In this example the single year is obtained but this  .
+In this example the single year is obtained.
 
+```         
+5.1 The script to create the link is `create_links.sh`, since the links created had to point to a complete path the script has to change for every system. 
+```
 
-    5.1 The script to create the link is `create_links.sh`, since the links created had to point to a complete path the script has to change for every system. 
-
-
-
-
-
-
-6. Now with all the predictions in one place the tensor spline is obtained. This is done inside **R** using the function `get_all_seasons_interval` that is in the `spline_year_predictions.R` file. In order to the spline to be saved, for each **year** in the time period a folder name with the year has to exist.
-
+6.  Now with all the predictions in one place the tensor spline is obtained. This is done inside **R** using the function `get_all_seasons_interval` that is in the `spline_year_predictions.R` file. In order to the spline to be saved, for each **year** in the time period a folder name with the year has to exist.
 
 From **R**
-```r
+
+``` r
 source('spline_year_predictions.R')
 #to get all year 
 get_all_seasons_interval(
@@ -125,30 +104,22 @@ get_all_seasons_interval(
     "2022-10-31"
     )
 ```
- 
- 
- Now the band of the spline has no name, therefore it has to be renamed. 
- 
- Se tienen que renombrar la banda en el tensor spline.
 
-7.  To rename the band is done with `./Python_scripts/rename_single_string.py`  in the example only the warm and rainy season are change. 
+Now the band of the spline has no name, therefore it has to be renamed.
 
-```bash 
+7.  To rename the band is done with `./Python_scripts/rename_single_string.py` in the example only the warm and rainy season are change.
+
+``` bash
 python rename_single_string.py --season_spline_path "../data/raster/Season_tensor_ZMVMZMVM/2022/"
-
 ```
 
-The modification with respect to the Just article is done here, the model obtained name 'model 3' is the one tha used to modify and to get a prediction when AOD data is unavailable.
+The modification with respect to the Just article is done here, the model obtained name 'model 3' is the one that used to modify and to get a prediction when AOD data is unavailable.
 
+The model is change here I have to upload the other function in to a single file and add all the functions to the file into a single script
 
-The model is change here I have to upload the other function in to a single file and add al the functions to the file into a single script
+8.  The daily prediction is made using the function `get_all_days_spline_interval` inside the `spline_year_predictions` file. A more detail example can be found in `spline_year_predictions_model3_example.qmd` and the corresponding R script `spline_year_predictions_model3_example.R` can be used to get all the season data and the corresponding daily season estimation.
 
-
-
-8. The daily prediction is made using the function `get_all_days_spline_interval` inside the `spline_year_predictions` file. A more detail example can be found in `spline_year_predictions_model3_example.qmd` and the corresponding R script `spline_year_predictions_model3_example.R` can be use to get all the season data and the corresponding daily season estimation. 
-
-
-```R
+``` r
 source('spline_year_predictions.R')
 get_all_days_spline_interval(
     start_date  = "2022-03-01",
@@ -177,41 +148,32 @@ get_all_days_spline_interval(
 )
 ```
 
+A bash script is used to move the files, since the daily files are obtained using the specific season, therefore the days that not correspond to the years are in the next year. The bash file move to the correct year. The bash script is `move_pred_m3.sh`
 
-A bash script is use to move the files, since the daily files are obtain using the specific season, therefore the days that not correspond to the years are in the next year. The bas file move to the correct year. The bash script is `move_pred_m3.sh`
+9.  To rename the band is done with the script `Python_scripts/rename_single_string.py` and the bash for multiple years is the following :
 
-
-
-
-9. To rename the band is done with the script `Python_scripts/rename_single_string.py` and the bash for multiple years is the following :
-
-```bash 
+``` bash
 for YEAR in {2004..2022}; 
     do  python rename_single_string.py --season_spline_path "../data/raster/ZMVM_seasons_days/$YEAR/" --name_band "PM25_predict_spline";
 done
-
 ```
-or a single folder 
 
-```bash
+or a single folder
+
+``` bash
 python rename_single_string.py --season_spline_path ../data/raster/ZMVM_seasons_m3/2022/  --name_band "PM25_predict_spline
 ```
 
-10. The spline band is merge with all the other bands for all the year for all the time period. 
+10. The spline band is merged with all the other bands for all the year for all the time period.
 
-
-
-```bash
+``` bash
 python glue_bands_folder_all_M3.py  --day_season_spline_path "../data/raster/ZMVM_seasons_m3/" --day_predictions  "../data/raster/ZMVM_predictions/" --save_path_glue "../data/raster/ZMVM_prediction_glue/" --start_year "2022" --end_year "2022"
 ```
 
 11. The bands has to be merge into a single one using the script `merge_PM_25_bands`
 
-
-```bash 
+``` bash
  python merge_PM_25_bands.py --path_glue_rasters "../data/raster/ZMVM_prediction_glue/" --save_path_merge "../data/raster/ZMVM_merge_final/" --upper_band "PM25_predict" --under_band "PM25_predict_spline" --merge_band "PM25_merge" --save_prefix "PM25_merge_" --start_year 2022 --end_year 2022 --verbose TRUE
 ```
 
-
-This ends how the estimations are made. 
-
+This ends how the estimations are made.
