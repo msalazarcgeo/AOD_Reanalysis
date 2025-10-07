@@ -19,6 +19,8 @@ All the data was downloaded from the sources describe in the article.
 
 ## With all the data
 
+## Get all into on raster
+
 1.  Daily Planetary Boundary layer with a single raster use the `./Python_scripts/get_average_grib.py`
 
 ``` bash
@@ -38,7 +40,9 @@ For the one of the metropolitan areas and merge with the data Downloaded from GE
 The data in the folders has to be complete (all day for the year for both, the PBLH rasters and the AOD_reanalisys data) if not an error occur.
 :::
 
-The predictions are made using a bash code that runs the R codes, the roads layer had to be readable form R.
+## Get all the estimations
+
+The estimations are made using a bash code that runs the R codes, the roads layer had to be readable form R.
 
 3.  All is done using the `./R_scripts/multiple_yearpredictions.sh` file.
 
@@ -65,6 +69,8 @@ The script take a time interval and obtain the yearly model and available daily 
 
 After all predictions are made the name of bands has to be added, this step could be avoided if this fix to set the name directly in R.
 
+## Arrange the data.
+
 4.  To change the name bands a python script is done `./Python_scripts/call_renamebands.sh` for multiple years. 4.1 The script Python script that is called is the `rename_bands_predictions.py` the following is an example for the call for a single year
 
     ``` bash
@@ -74,6 +80,8 @@ After all predictions are made the name of bands has to be added, this step coul
 \*\* A folder with all the links is made in order to do the seasonal splines. \*\*
 
 5.  When a complete period is done (meaning multiple years), we would like to have the corresponding files in a single folder. The reason is that when the seasonal model is created, the path for each file for all the files to consider for each season would be harder to keep the track of, and the duplication of the data has to be avoided. So a script is made to create a symbolic link of all the predictions for a metropolitan area in a single folder.
+
+## Get Spline
 
 In this example the single year is obtained.
 
@@ -105,6 +113,8 @@ get_all_seasons_interval(
     )
 ```
 
+## Fix names
+
 Now the band of the spline has no name, therefore it has to be renamed.
 
 7.  To rename the band is done with `./Python_scripts/rename_single_string.py` in the example only the warm and rainy season are change.
@@ -112,6 +122,8 @@ Now the band of the spline has no name, therefore it has to be renamed.
 ``` bash
 python rename_single_string.py --season_spline_path "../data/raster/Season_tensor_ZMVMZMVM/2022/"
 ```
+
+## Apply season Spline Model
 
 The modification with respect to the Just article is done here, the model obtained name 'model 3' is the one that used to modify and to get a prediction when AOD data is unavailable.
 
@@ -161,7 +173,7 @@ done
 or a single folder
 
 ``` bash
-python rename_single_string.py --season_spline_path ../data/raster/ZMVM_seasons_m3/2022/  --name_band "PM25_predict_spline
+python rename_single_string.py --season_spline_path ../data/raster/ZMVM_seasons_m3/2022/  --name_band "PM25_predict_spline"
 ```
 
 10. The spline band is merged with all the other bands for all the year for all the time period.
