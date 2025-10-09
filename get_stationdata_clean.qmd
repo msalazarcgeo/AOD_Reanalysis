@@ -3,19 +3,18 @@ title: "Merge data like original"
 format: html
 ---
 
-##  Objective 
+## Objective
 
-This notebook is build only to show how to generate a dataframe that was use to obthain the the results of the article. 
+This notebook is build only to show how to generate a data frame that was used to obtain the results of the article.
 
+Since it has to be store in a `RDA` I will do it on *R*. Since all the data has been downloaded in a specific path
 
-Since is has to be store in a `RDA` I will do it on *R*. Since all the data has been dawnloaded in a specific path 
 ```{r}
 pacman::p_load(tidyverse, purrr, sf)
 
 ```
 
-Load all the csv files downloaded from the SINAICA API
-
+Load all the CSV files downloaded from the SINAICA API
 
 ```{r}
 path_crude_files <- '../data/Crude_stations/'
@@ -28,7 +27,7 @@ temp_files <- list.files(path_crude_files,
 
 ```
 
-Open all the files and to merge into a single dataframe
+Open all the files and to merge into a single data frame
 
 ```{r}
 df_li = list()
@@ -46,12 +45,15 @@ for(file_csv in 1:length(temp_files)){
 ```{r}
 df_data <- bind_rows(df_li)
 ```
+
 Remove duplicates since some data is duplicate was reported more than once
 
 ```{r}
  df_data <- df_data %>% distinct(station_name, date, hour, parametro, .keep_all = TRUE)
 ```
-Originaly this is done year by year here is an example that can work for the single year 
+
+Originally this is done year by year here is an example that can work for the single year
+
 ```{r}
 #year_selected <- unique(year(df_data$date))
 
@@ -93,7 +95,6 @@ horas_num_pm10  <-  df_data%>%
 
 ```
 
-
 ```{r}
 
 list_df <- list(horas_num_tmp,horas_num_hr,horas_num_pm25, horas_num_pm10)
@@ -103,18 +104,16 @@ result <- reduce(list_df, inner_join,
 result$station_code <- paste0(result$station_code , '_ZMVM')
 ```
 
+With all the data available create the data frame in columns for mean for the day if a new value is needed here is where the changes should be made.
 
-With all the data available create the dataframe in columns for meean for the day if a new value is needed here is where the cahnges shoul be made. 
-
-The columns needed in the file are **CVE_EST, FECHA, PM2.5_S50,         PM2.5_S60, PM2.5_S75**
-
-
+The columns needed in the file are **CVE_EST, FECHA, PM2.5_S50, PM2.5_S60, PM2.5_S75**
 
 ```{r}
 mutate(
     b = ifelse(PM2.5_mean*.5 >=12, NA, PM2.5_mean)
   )
 ```
+
 ```{r}
 
 BDA_dia_sr <-result %>% mutate(
@@ -129,13 +128,7 @@ save(BDA_dia_sr, file = "../data/R_data/BDA_exemp.Rda")
 head(BDA_dia_sr)
 ```
 
-
-
 ```{r}
 #save to rda file
-<<<<<<< HEAD
 #save(result, file = "../data/R_data/BDA_exemp.Rda")
-=======
-save(result, file = "../data/R_data/BDA_exemp.Rda")
->>>>>>> 8eacb7a43e4e1926fa4be34063c7668d13559d0b
 ```
