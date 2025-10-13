@@ -108,11 +108,7 @@ With all the data available create the data frame in columns for mean for the da
 
 The columns needed in the file are **CVE_EST, FECHA, PM2.5_S50, PM2.5_S60, PM2.5_S75**
 
-```{r}
-mutate(
-    b = ifelse(PM2.5_mean*.5 >=12, NA, PM2.5_mean)
-  )
-```
+
 
 ```{r}
 
