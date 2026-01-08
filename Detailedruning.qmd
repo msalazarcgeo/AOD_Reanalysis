@@ -3,6 +3,7 @@ title: "Modeling in Mexican Cities using using Aerosol Optical Depth and Meteoro
 format: 
     html: default
     pdf: default
+    ipynb: default
 editor: source
 ---
 
@@ -39,7 +40,7 @@ For the one of the metropolitan areas and merge with the data Downloaded from GE
  python ./Python_scripts/get_res_cut_merg.py --grib_file ./data/ECMWF/2022_PBLH.grib  --path_dir_day_average ./data/raster/ECMWF_rasters/2022/ --path_dir_multy_band ./data/raster/AOD_REA_GEE/ZMVM/2022/ --path_dir_resample ./data/raster/middle_PBLH/resample/2022/ --path_dir_cut ./data/raster/middle_PBLH/cut/2022/  --path_dir_merge ./data/raster/middle_PBLH/all_bands/2022/ --file_metropolitan_polygon ./data/Zonas_metro/ZMVM.shp
 ```
 
-::: callout-warning
+:::callout-warning
 The data in the folders has to be complete (all day for the year for both, the PBLH rasters and the AOD_reanalisys data) if not an error occur.
 :::
 
